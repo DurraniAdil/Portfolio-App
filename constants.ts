@@ -147,6 +147,24 @@ const DEV_PROFILE: ProfileData = {
         stack: ["React 19", "Vite", "Tailwind CSS", "Lucide React"]
       },
       links: { demo: "https://durraniadil.github.io/Muse/", repo: "https://github.com/DurraniAdil/Muse" }
+    },
+    {
+      id: "p_dev_endless",
+      title: "3D Printing Studio",
+      subtitle: "E-Commerce Platform",
+      description: "Modern, high-performance e-commerce web application for a premium 3D printing service with product catalog, custom design uploads, and instant quotes.",
+      imageUrl: media('endless.png'),
+      role: "Developer",
+      year: "2026",
+      tags: ["React 18", "TypeScript", "Tailwind", "Vite"],
+      stats: { duration: "Shipped", views: "Live", likes: 280 },
+      details: {
+        problem: "Creating a seamless experience for 3D printing customers to browse products and request custom designs.",
+        approach: "Built with React 18, TypeScript, and Tailwind CSS with custom animations, product filtering, cart management, and file upload for custom 3D models.",
+        outcome: "A premium e-commerce platform with 'wow-factor' UX, smooth animations, and comprehensive customization options.",
+        stack: ["React 18", "TypeScript", "Vite", "Tailwind CSS", "React Router", "Lucide React"]
+      },
+      links: { demo: "https://www.endless3dprinting.com/", repo: "https://github.com/shahidsk0403/be-endless-3d-studio" }
     }
   ],
   // Populating Activity with the Resume Projects
@@ -159,7 +177,8 @@ const DEV_PROFILE: ProfileData = {
     { id: "a_dev_6", date: "2025", title: "DEKONSTRT", description: "AI-Powered Code Analysis & Deconstruction Tool.", type: "experiment" },
     { id: "a_dev_7", date: "2025", title: "THEMATIC TRANSLATOR", description: "Linguistic AI Suite for Urdu poetry archives.", type: "experiment" },
     { id: "a_dev_8", date: "2025", title: "IBN-E-ADIL", description: "Personal Literary-Tech Identity Site.", type: "experiment" },
-    { id: "a_dev_9", date: "2025", title: "MUSE", description: "Digital Atelier for Poetry and Quote Cards.", type: "publish" }
+    { id: "a_dev_9", date: "2025", title: "MUSE", description: "Digital Atelier for Poetry and Quote Cards.", type: "publish" },
+    { id: "a_dev_10", date: "2026", title: "3D Printing Studio", description: "Premium e-commerce platform for BE Endless 3D printing service.", type: "ship" }
   ],
   // Populating Explore with Resume Skills - BENTO GRID DATA
   explore: [
