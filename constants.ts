@@ -2,9 +2,13 @@ import { ProfileData } from './types';
 import {
   ClipboardList, GitMerge, Users, UserCheck, FileText, PieChart, MessageSquare,
   BarChart2, HeartHandshake, UserPlus, CalendarRange, Layout, Hash, Grid, Table2,
-  Calendar, Store, Puzzle, BookOpen, Scroll, Feather, AlignLeft, Book, Star, Award,
+  Calendar, Store, BookOpen, Scroll, Feather, AlignLeft, Book, Star, Award,
   PenTool
 } from 'lucide-react';
+
+// Base URL for GitHub Pages - Vite injects this at build time
+const BASE_URL = import.meta.env.BASE_URL || '/';
+const media = (path: string) => `${BASE_URL}media/${path}`;
 
 // Shared Socials
 const SHARED_SOCIALS = {
@@ -51,7 +55,7 @@ const DEV_PROFILE: ProfileData = {
     role: "Front-end Developer",
     bio: "Building responsive, user-centric web apps. Passionate about pixel-perfect design and clean architecture.",
     location: "Aurangabad, India",
-    avatarUrl: "/media/developer.png",
+    avatarUrl: media('developer.png'),
     skills: [],
     experience: [
       { company: "Be Endless", role: "Project Manager", period: "Nov 25' - Present" },
@@ -66,8 +70,8 @@ const DEV_PROFILE: ProfileData = {
       icon: '',
       color: 'bg-[#F4F1EA]',
       content: [],
-      avatarImage: '/media/developer.png',
-      storyImage: '/media/dev-me-story.png'
+      avatarImage: media('developer.png'),
+      storyImage: media('dev-me-story.png')
     }
   ],
   projects: [
@@ -77,7 +81,7 @@ const DEV_PROFILE: ProfileData = {
       title: "DEKONSTRT",
       subtitle: "AI Code Analysis",
       description: "AI-Powered Code Analysis & Deconstruction Tool designed to turn complex source code into beginner-level understanding.",
-      imageUrl: "/media/dekon.png",
+      imageUrl: media('dekon.png'),
       role: "Developer",
       year: "2025",
       tags: ["React 19", "TypeScript", "Tailwind"],
@@ -95,7 +99,7 @@ const DEV_PROFILE: ProfileData = {
       title: "Thematic Translator",
       subtitle: "Linguistic AI Suite",
       description: "Specialized AI Digitization & Linguistic Analysis Suite for digitizing and translating Urdu poetry.",
-      imageUrl: "/media/trans.png",
+      imageUrl: media('trans.png'),
       role: "Engineer",
       year: "2025",
       tags: ["React", "Generative AI", "AI"],
@@ -113,7 +117,7 @@ const DEV_PROFILE: ProfileData = {
       title: "IBN-E-ADIL",
       subtitle: "Personal Portfolio",
       description: "Literary-Tech Identity Site serving as an interactive convergence of professional engineering and literary artistry.",
-      imageUrl: "/media/ibn.png",
+      imageUrl: media('ibn.png'),
       role: "Full Stack",
       year: "2025",
       tags: ["Motion", "TypeScript", "React"],
@@ -131,7 +135,7 @@ const DEV_PROFILE: ProfileData = {
       title: "Muse",
       subtitle: "Digital Atelier",
       description: "Aesthetic web application designed for the contemplation and creation of digital poetry and quote cards.",
-      imageUrl: "/media/muse.png",
+      imageUrl: media('muse.png'),
       role: "Creator",
       year: "2025",
       tags: ["React 19", "Vite", "Tailwind"],
@@ -206,7 +210,7 @@ const OPS_PROFILE: ProfileData = {
     role: "Project Manager & Operations",
     bio: "Results-driven coordinator optimizing workflows and delivering projects on time. Specialist in stakeholder management and resource optimization.",
     location: "Aurangabad, India",
-    avatarUrl: "/media/operations.png",
+    avatarUrl: media('operations.png'),
     certifications: [
       { name: "Human Resources - GE Aerospace", url: "https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/ay2tsYxaTif7Nt6z7/bAPubTkawzGexc6TT_ay2tsYxaTif7Nt6z7_a34c98gcDixQwcwR6_1746354049218_completion_certificate.pdf" },
       { name: "Strategy Consulting - BCG", url: "https://www.theforage.com/completion-certificates/SKZxezskWgmFjRvj9/ntTvo6ru6Tq3A2JPq_SKZxezskWgmFjRvj9_a34c98gcDixQwcwR6_1763027098328_completion_certificate.pdf" },
@@ -225,8 +229,8 @@ const OPS_PROFILE: ProfileData = {
       icon: '',
       color: 'bg-white',
       content: [],
-      avatarImage: '/media/operations.png',
-      storyImage: '/media/ops-me-story.png'
+      avatarImage: media('operations.png'),
+      storyImage: media('ops-me-story.png')
     }
   ],
   projects: [
@@ -235,7 +239,7 @@ const OPS_PROFILE: ProfileData = {
       title: "Western Electrical Ops",
       subtitle: "Operations & Tender Mgmt",
       description: "Managed daily operations for a government-licensed contracting firm, overseeing public sector infrastructure execution.",
-      imageUrl: "/media/we-logo.png",
+      imageUrl: media('we-logo.png'),
       role: "Internal Manager",
       year: "2025",
       tags: ["Operations", "Compliance", "Logistics"],
@@ -253,7 +257,7 @@ const OPS_PROFILE: ProfileData = {
       title: "Campus Recruitment Drive",
       subtitle: "P.E.S College Placement",
       description: "Orchestrated 8+ recruitment drives facilitating opportunities for 150+ students.",
-      imageUrl: "/media/pes-ops.jfif",
+      imageUrl: media('pes-ops.jfif'),
       role: "Coordinator",
       year: "2024-25",
       tags: ["Recruitment", "Event Mgmt", "HR"],
@@ -271,7 +275,7 @@ const OPS_PROFILE: ProfileData = {
       title: "Student Council Finance",
       subtitle: "Budget Optimization",
       description: "Managed budgets totaling ₹200,000+ for student initiatives with 100% policy compliance.",
-      imageUrl: "/media/pes-college-ops.webp",
+      imageUrl: media('pes-college-ops.webp'),
       role: "Financial Lead",
       year: "2024",
       tags: ["Finance", "Reporting", "Audit"],
@@ -339,7 +343,7 @@ const CONTENT_PROFILE: ProfileData = {
     role: "Poet & Content Strategist",
     bio: "Published poet and SEO strategist. I merge philosophical inquiry with conversion-focused narratives.",
     location: "Remote / India",
-    avatarUrl: "/media/content.png",
+    avatarUrl: media('content.png'),
     // removed currentlyWorkingOn as requested
     skills: ["SEO Writing", "Creative Writing", "Copywriting", "Storytelling", "Research", "Editing"],
     // removed experience from profile view, moved to activities
@@ -358,8 +362,8 @@ const CONTENT_PROFILE: ProfileData = {
       icon: '',
       color: 'bg-white',
       content: [],
-      avatarImage: '/media/content.png',
-      storyImage: '/media/poet-me-story.png'
+      avatarImage: media('content.png'),
+      storyImage: media('poet-me-story.png')
     }
   ],
   projects: [
@@ -368,7 +372,7 @@ const CONTENT_PROFILE: ProfileData = {
       title: "Nazm-e-Adil Vol I",
       subtitle: "Poetry Collection",
       description: "A curated cycle of twenty-three philosophical verses navigating the sacred terrain between divine love and the annihilation of the ego.",
-      imageUrl: "/media/nazmv1.png", // Placeholder for Abstract book cover/calligraphy
+      imageUrl: media('nazmv1.png'), // Placeholder for Abstract book cover/calligraphy
       role: "Author",
       year: "2025",
       tags: ["Poetry", "Philosophy", "Sufism"],
@@ -386,7 +390,7 @@ const CONTENT_PROFILE: ProfileData = {
       title: "Raah-e-Digaar",
       subtitle: "Personal Reflection",
       description: "thinking of taking some other path",
-      imageUrl: "/media/raah.png", // Placeholder for Path/Nature
+      imageUrl: media('raah.png'), // Placeholder for Path/Nature
       role: "Poet",
       year: "2026",
       tags: ["Reflection", "Life", "Journey"],
@@ -404,7 +408,7 @@ const CONTENT_PROFILE: ProfileData = {
       title: "Nazm-e-Adil Vol II",
       subtitle: "Poetry Collection",
       description: "The continuation of the Sufi-inspired cycle, delving deeper into the metaphysics of silence and faith.",
-      imageUrl: "/media/nazmv2.png", // Placeholder for Abstract
+      imageUrl: media('nazmv2.png'), // Placeholder for Abstract
       role: "Author",
       year: "2025",
       tags: ["Poetry", "Sequel", "Sufism"],

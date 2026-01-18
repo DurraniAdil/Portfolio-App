@@ -4,6 +4,10 @@ import { Button } from '../components/UI';
 import { PROFILES } from '../constants';
 import { ProfileData } from '../types';
 
+// Base URL for GitHub Pages
+const BASE_URL = import.meta.env.BASE_URL || '/';
+const media = (path: string) => `${BASE_URL}media/${path}`;
+
 interface LoginScreenProps {
     onLogin: (password: string) => void;
     error?: string;
@@ -146,7 +150,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
                     <div className="absolute inset-0 border-2 border-green-500 rounded-full animate-ping opacity-20"></div>
                     <div className="w-32 h-32 rounded-full border-4 border-green-500/50 p-1 bg-black overflow-hidden shadow-[0_0_30px_rgba(34,197,94,0.4)]">
                         <img
-                            src="/media/developer.png"
+                            src={media('developer.png')}
                             alt="Developer"
                             className="w-full h-full object-cover rounded-full animate-pulse-slow filter sepia-[.5] hue-rotate-[50deg]"
                         />
@@ -179,7 +183,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
 
                 <div className="relative w-32 h-32 rounded-full bg-slate-800 border-4 border-slate-700 overflow-hidden shadow-2xl">
                     <img
-                        src="/media/operations.png"
+                        src={media('operations.png')}
                         alt="Operations"
                         className="w-full h-full object-cover opacity-80"
                     />
@@ -214,7 +218,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
                 <div className={`transition-all duration-1000 transform ${transitionStage >= 1 ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}`}>
                     <div className="w-40 h-40 rounded-full border-4 border-amber-900/20 p-2 overflow-hidden shadow-xl bg-white mb-8">
                         <img
-                            src="/media/content.png"
+                            src={media('content.png')}
                             alt="Poet"
                             className="w-full h-full object-cover transition-transform duration-[10s] ease-linear hover:scale-110"
                         />
@@ -377,7 +381,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
                 <div className="flex flex-col items-center gap-1 opacity-40">
                     <span className="text-[10px] uppercase tracking-widest font-medium">From</span>
                     <span className="font-bold tracking-tight text-white flex items-center gap-1">
-                        <img src="/media/login.png" alt="Logo" className="w-4 h-4 object-contain" />
+                        <img src={media('login.png')} alt="Logo" className="w-4 h-4 object-contain" />
                         Adil Portfolio
                     </span>
                 </div>

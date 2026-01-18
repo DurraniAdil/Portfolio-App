@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Cpu } from 'lucide-react';
 
+// Base URL for GitHub Pages
+const BASE_URL = import.meta.env.BASE_URL || '/';
+const media = (path: string) => `${BASE_URL}media/${path}`;
+
 interface SplashScreenProps {
   onFinish: () => void;
 }
@@ -52,7 +56,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
         <div className="relative mb-8">
           <div className="absolute inset-0 bg-blue-500/30 blur-3xl rounded-full"></div>
           <div className="relative w-24 h-24 bg-neutral-900 border border-neutral-800 rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden p-2">
-            <img src="/media/login.png" alt="System Logo" className="w-full h-full object-contain" />
+            <img src={media('login.png')} alt="System Logo" className="w-full h-full object-contain" />
           </div>
         </div>
       </div>

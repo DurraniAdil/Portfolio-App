@@ -3,6 +3,10 @@ import { ProfileData } from '../types';
 import { Button, Tag } from '../components/UI';
 import { Github, Linkedin, Mail, MapPin, Briefcase, Zap, LogOut, FileText, Globe, Instagram, Award, Phone } from 'lucide-react';
 
+// Base URL for GitHub Pages
+const BASE_URL = import.meta.env.BASE_URL || '/';
+const media = (path: string) => `${BASE_URL}media/${path}`;
+
 interface ProfileProps {
     profile: ProfileData;
     onLogout: () => void;
@@ -231,7 +235,7 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                     {/* Box 2: Resume (Dev) / LinkedIn (Ops & Content) */}
                     {isDeveloperProfile ? (
                         <button
-                            onClick={() => handleDownload('/media/resume_developer.pdf', 'Durrani_Adil_Developer_Resume.pdf')}
+                            onClick={() => handleDownload(media('resume_developer.pdf'), 'Durrani_Adil_Developer_Resume.pdf')}
                             className="bg-os-card border border-os-border rounded-lg aspect-square flex flex-col items-center justify-center gap-2 hover:bg-os-border/20 transition-colors group cursor-pointer"
                         >
                             <FileText size={32} className="text-os-muted group-hover:text-purple-500" />
@@ -259,7 +263,7 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                     ) : (
                         <button
                             onClick={() => handleDownload(
-                                isOperationsProfile ? '/media/resume_operations.pdf' : '/media/resume_writer.pdf',
+                                isOperationsProfile ? media('resume_operations.pdf') : media('resume_writer.pdf'),
                                 isOperationsProfile ? 'Durrani_Adil_Operations_Resume.pdf' : 'Durrani_Adil_Writer_Resume.pdf'
                             )}
                             className="bg-os-card border border-os-border rounded-lg aspect-square flex flex-col items-center justify-center gap-2 hover:bg-os-border/20 transition-colors group cursor-pointer"
