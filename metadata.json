@@ -1,0 +1,5 @@
+{
+  "name": "portfolio-app",
+  "description": "A native-app style portfolio showcasing engineering projects and design skills, serving as a companion to the desktop OS portfolio.",
+  "requestFramePermissions": []
+}
