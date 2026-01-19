@@ -15,14 +15,13 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
   const [showLogo, setShowLogo] = useState(false);
 
   useEffect(() => {
-    // Stage 1: Progress Bar & Status Text
+    // first stage
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(timer);
           return 100;
         }
-        // Randomize speed
         const increment = Math.random() * 5 + 1;
         return Math.min(prev + increment, 100);
       });
@@ -31,7 +30,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
     return () => clearInterval(timer);
   }, []);
 
-  // Update status text based on progress
+  // update status text based on progress
   useEffect(() => {
     if (progress < 20) setStatusText("Initializing Kernel...");
     else if (progress < 40) setStatusText("Mounting File Systems...");
@@ -51,7 +50,6 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
   return (
     <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center font-mono text-white">
 
-      {/* Central Content */}
       <div className={`transition-all duration-700 transform ${showLogo ? 'scale-110 opacity-100' : 'scale-100 opacity-90'}`}>
         <div className="relative mb-8">
           <div className="absolute inset-0 bg-blue-500/30 blur-3xl rounded-full"></div>
@@ -68,7 +66,6 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
         <p className="text-[10px] text-neutral-500 uppercase tracking-[0.2em] mb-12">Mobile Environment v1.0</p>
       </div>
 
-      {/* Loading Bar at Bottom */}
       <div className="absolute bottom-20 w-64">
         <div className="flex justify-between text-[10px] text-neutral-400 mb-2 font-mono">
           <span>{statusText}</span>
@@ -82,9 +79,8 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
         </div>
       </div>
 
-      {/* Decor */}
       <div className="absolute bottom-6 text-[9px] text-neutral-700 font-mono">
-        © 2025 ADIL DURRANI. ALL SYSTEMS NORMAL.
+        © 2026 ADIL DURRANI. ALL SYSTEMS NORMAL.
       </div>
     </div>
   );

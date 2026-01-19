@@ -6,16 +6,15 @@ import {
   PenTool
 } from 'lucide-react';
 
-// Base URL for GitHub Pages - Vite injects this at build time
 const BASE_URL = import.meta.env.BASE_URL || '/';
 const media = (path: string) => `${BASE_URL}media/${path}`;
 
-// Shared Socials
+// shared socials
 const SHARED_SOCIALS = {
   github: "https://github.com/DurraniAdil",
   linkedin: "https://www.linkedin.com/in/durraniadil13/",
   email: "durraniadil13@gmail.com",
-  portfolio: "durraniadil.github.io/Portfolio-Portal/"
+  portfolio: "https://durraniadil.github.io/Portfolio-Portal/"
 };
 
 
@@ -23,25 +22,24 @@ const createSkill = (id: string, title: string, category: string, iconSlug?: str
   id,
   title,
   category,
-  // Fallback to UI Avatars if no slug provided, otherwise use Simple Icons
   imageUrl: iconSlug
     ? `https://cdn.simpleicons.org/${iconSlug}/${color || 'ffffff'}`
     : `https://ui-avatars.com/api/?name=${title}&background=random&color=fff&size=200&font-size=0.33`
 });
 
-// 1. DEVELOPER PROFILE
+// developer profile
 const DEV_PROFILE: ProfileData = {
   id: 'developer',
   theme: {
     id: 'dark-os',
     colors: {
-      bg: '#09090b', // Zinc 950
-      card: '#18181b', // Zinc 900
-      border: '#27272a', // Zinc 800
-      primary: '#8b5cf6', // Violet 500
-      accent: '#06b6d4', // Cyan 500
+      bg: '#09090b',
+      card: '#18181b',
+      border: '#27272a',
+      primary: '#8b5cf6',
+      accent: '#06b6d4',
       text: '#ffffff',
-      muted: '#a1a1aa', // Zinc 400
+      muted: '#a1a1aa',
     },
     fonts: {
       body: 'Inter',
@@ -60,7 +58,7 @@ const DEV_PROFILE: ProfileData = {
       { company: "Be Endless", role: "Project Manager", period: "Nov 25' - Present" },
     ],
     socials: SHARED_SOCIALS,
-    dmTemplate: "Hi Adil, I checked out your developer portfolio and I'm interested in discussing a project regarding..."
+    dmTemplate: "Hi Adil! I checked out your developer portfolio and I'm interested in discussing a project.\n\nHere's what I'm looking for:\n[Describe your project/idea]\n\nYou can reach me at:\n📧 [Your Email]"
   },
   stories: [
     {
@@ -74,7 +72,7 @@ const DEV_PROFILE: ProfileData = {
     }
   ],
   projects: [
-    // These act as "Fav Projects" on Home Feed - Keeping a selection of the resume items
+    //fav projects for homefeed as posts
     {
       id: "p_dev_dekonstrt",
       title: "DEKONSTRT",
@@ -163,10 +161,10 @@ const DEV_PROFILE: ProfileData = {
         outcome: "A premium e-commerce platform with 'wow-factor' UX, smooth animations, and comprehensive customization options.",
         stack: ["React 18", "TypeScript", "Vite", "Tailwind CSS", "React Router", "Lucide React"]
       },
+      //will eventually gon add this to my own repo
       links: { demo: "https://www.endless3dprinting.com/", repo: "https://github.com/shahidsk0403/be-endless-3d-studio" }
     }
   ],
-  // Populating Activity with the Resume Projects
   activities: [
     { id: "a_dev_1", date: "Nov 2024", title: "NotePad", description: "Built feature-rich notepad with resizable workspace, dark mode, and local storage.", type: "ship" },
     { id: "a_dev_2", date: "Nov 2024", title: "Random Quote Machine", description: "Developed dynamic quote generator with Fetch API and instant clipboard copy.", type: "ship" },
@@ -179,7 +177,6 @@ const DEV_PROFILE: ProfileData = {
     { id: "a_dev_9", date: "2025", title: "MUSE", description: "Digital Atelier for Poetry and Quote Cards.", type: "publish" },
     { id: "a_dev_10", date: "2026", title: "3D Printing Studio", description: "Premium e-commerce platform for BE Endless 3D printing service.", type: "ship" }
   ],
-  // Populating Explore with Resume Skills - BENTO GRID DATA
   explore: [
     createSkill('js', 'JavaScript', 'Language', 'javascript', 'F7DF1E'),
     createSkill('react', 'React.js', 'Library', 'react', '61DAFB'),
@@ -207,15 +204,15 @@ const DEV_PROFILE: ProfileData = {
 const OPS_PROFILE: ProfileData = {
   id: 'operations',
   theme: {
-    id: 'midnight-ops', // Switched to Dark Theme for visibility
+    id: 'midnight-ops',
     colors: {
-      bg: '#020617', // Slate 950
-      card: '#0f172a', // Slate 900
-      border: '#1e293b', // Slate 800
-      primary: '#38bdf8', // Sky 400
-      accent: '#22d3ee', // Cyan 400
-      text: '#f8fafc', // Slate 50
-      muted: '#94a3b8', // Slate 400
+      bg: '#020617',
+      card: '#0f172a',
+      border: '#1e293b',
+      primary: '#38bdf8',
+      accent: '#22d3ee',
+      text: '#f8fafc',
+      muted: '#94a3b8',
     },
     fonts: {
       body: 'Lato',
@@ -234,11 +231,10 @@ const OPS_PROFILE: ProfileData = {
       { name: "Strategy Consulting - BCG", url: "https://www.theforage.com/completion-certificates/SKZxezskWgmFjRvj9/ntTvo6ru6Tq3A2JPq_SKZxezskWgmFjRvj9_a34c98gcDixQwcwR6_1763027098328_completion_certificate.pdf" },
       { name: "ESG Consultant - TATA Consultancy", url: "https://www.theforage.com/completion-certificates/ifobHAoMjQs9s6bKS/N8Muuhk6XsXgMTeu2_ifobHAoMjQs9s6bKS_a34c98gcDixQwcwR6_1763618164915_completion_certificate.pdf" }
     ],
-    // Removed specific experience/skills from Profile Tab display as requested
     experience: [],
     skills: [],
     socials: SHARED_SOCIALS,
-    dmTemplate: "Hi Adil, I'm impressed by your operations background and would like to discuss a management role..."
+    dmTemplate: "Hi Adil! I'm impressed by your operations background and would like to discuss an opportunity.\n\nHere's what I have in mind:\n[Role/Project Details]\n\nYou can reach me at:\n📧 [Your Email]"
   },
   stories: [
     {
@@ -342,13 +338,13 @@ const CONTENT_PROFILE: ProfileData = {
   theme: {
     id: 'literary-warm',
     colors: {
-      bg: '#fbf7f0', // Warm paper / stone-50 ish
-      card: '#f4eadd', // Slightly darker warm
-      border: '#d6cbb8', // Stone 300
-      primary: '#78350f', // Amber 900
-      accent: '#ca8a04', // Yellow 600
-      text: '#451a03', // Amber 950
-      muted: '#a8a29e', // Stone 400
+      bg: '#fbf7f0',
+      card: '#f4eadd',
+      border: '#d6cbb8',
+      primary: '#78350f',
+      accent: '#ca8a04',
+      text: '#451a03',
+      muted: '#a8a29e',
     },
     fonts: {
       body: 'Playfair Display',
@@ -362,16 +358,13 @@ const CONTENT_PROFILE: ProfileData = {
     bio: "Published poet and SEO strategist. I merge philosophical inquiry with conversion-focused narratives.",
     location: "Remote / India",
     avatarUrl: media('content.png'),
-    // removed currentlyWorkingOn as requested
     skills: ["SEO Writing", "Creative Writing", "Copywriting", "Storytelling", "Research", "Editing"],
-    // removed experience from profile view, moved to activities
     experience: [],
     socials: {
       ...SHARED_SOCIALS,
-      // Override for Content Profile
       github: "https://www.instagram.com/durrani.hw/"
     },
-    dmTemplate: "Hi Adil, I read your poetry and articles, and I'd love to collaborate on a creative piece..."
+    dmTemplate: "Hi Adil! I read your poetry and articles, and I'd love to collaborate.\n\nHere's what I'm thinking:\n[Your Idea]\n\nYou can reach me at:\n📧 [Your Email]"
   },
   stories: [
     {
@@ -390,7 +383,7 @@ const CONTENT_PROFILE: ProfileData = {
       title: "Nazm-e-Adil Vol I",
       subtitle: "Poetry Collection",
       description: "A curated cycle of twenty-three philosophical verses navigating the sacred terrain between divine love and the annihilation of the ego.",
-      imageUrl: media('nazmv1.png'), // Placeholder for Abstract book cover/calligraphy
+      imageUrl: media('nazmv1.png'),
       role: "Author",
       year: "2025",
       tags: ["Poetry", "Philosophy", "Sufism"],
@@ -404,11 +397,29 @@ const CONTENT_PROFILE: ProfileData = {
       links: {}
     },
     {
+      id: "p_cont_tern",
+      title: "SEO Content @ TERN",
+      subtitle: "AI Recruitment Platform",
+      description: "Drove organic search visibility by authoring 10+ SEO-optimized blogs on AI recruitment. Generated 13k+ words adhering to brand guidelines.",
+      imageUrl: media('tern.png'),
+      role: "Content Writer",
+      year: "2025",
+      tags: ["SEO", "AI", "Content Strategy"],
+      stats: { duration: "3 months", views: "13k+ words", likes: 210 },
+      details: {
+        problem: "Building organic search visibility for an AI-powered recruitment platform.",
+        approach: "Authored SEO-optimized blogs focusing on AI recruitment trends, best practices, and industry insights while adhering to strict brand guidelines.",
+        outcome: "Increased organic search visibility and established thought leadership in the AI recruitment space.",
+        stack: ["SEO Writing", "Content Strategy", "AI/Tech", "Brand Guidelines"]
+      },
+      links: {}
+    },
+    {
       id: "p_cont_2",
       title: "Raah-e-Digaar",
       subtitle: "Personal Reflection",
       description: "thinking of taking some other path",
-      imageUrl: media('raah.png'), // Placeholder for Path/Nature
+      imageUrl: media('raah.png'),
       role: "Poet",
       year: "2026",
       tags: ["Reflection", "Life", "Journey"],
@@ -426,7 +437,7 @@ const CONTENT_PROFILE: ProfileData = {
       title: "Nazm-e-Adil Vol II",
       subtitle: "Poetry Collection",
       description: "The continuation of the Sufi-inspired cycle, delving deeper into the metaphysics of silence and faith.",
-      imageUrl: media('nazmv2.png'), // Placeholder for Abstract
+      imageUrl: media('nazmv2.png'),
       role: "Author",
       year: "2025",
       tags: ["Poetry", "Sequel", "Sufism"],
@@ -440,7 +451,6 @@ const CONTENT_PROFILE: ProfileData = {
       links: {}
     }
   ],
-  // Populating Activity with the detailed Work History
   activities: [
     { id: "a_cont_1", date: "Aug 25’ – Oct 25’", title: "Content Writer @ TERN", description: "Drove organic search visibility by authoring 10+ SEO-optimized blogs on AI recruitment. Generated 13k+ words adhering to brand guidelines.", type: "ship" },
     { id: "a_cont_2", date: "Nov 24’ – Mar 25’", title: "Academic Writer @ MyMegaminds", description: "Delivered 40+ academic essays across 15+ disciplines. Maintained 100% compliance with APA/MLA standards.", type: "publish" },
@@ -449,8 +459,15 @@ const CONTENT_PROFILE: ProfileData = {
     { id: "a_cont_5", date: "Jun 23’ – Sep 23’", title: "Content Writer @ NayePankh", description: "Increased engagement by 15% for social awareness campaigns. Drafted newsletters and donor stories.", type: "manage" },
     { id: "a_cont_6", date: "June 21’ – Present", title: "Writer and Poet", description: "Cultivated portfolio of 300+ poems. Developing full-length collection and philosophical novel.", type: "experiment" }
   ],
-  // Populating Explore with Literary Works & Certifications (Bento Grid)
   explore: [
+    // Expertise 
+    { id: 'e_skill_1', title: 'SEO Writing', category: 'Expertise', icon: FileText },
+    { id: 'e_skill_2', title: 'Creative Writing', category: 'Expertise', icon: PenTool },
+    { id: 'e_skill_3', title: 'Copywriting', category: 'Expertise', icon: AlignLeft },
+    { id: 'e_skill_4', title: 'Storytelling', category: 'Expertise', icon: BookOpen },
+    { id: 'e_skill_5', title: 'Research', category: 'Expertise', icon: Scroll },
+    { id: 'e_skill_6', title: 'Editing', category: 'Expertise', icon: Feather },
+    // personal stuff
     { id: 'e_lit_1', title: 'Nazm-e-Adil I & II', category: 'Poetry', icon: BookOpen },
     { id: 'e_lit_2', title: 'Greek & Latin Fragments', category: 'Poetry', icon: Scroll },
     { id: 'e_lit_3', title: 'Novel Draft', category: 'Fiction', icon: Feather },
@@ -469,5 +486,4 @@ export const PROFILES: Record<string, ProfileData> = {
   'content': CONTENT_PROFILE
 };
 
-// Default fallback (can be empty or one of them)
 export const DEFAULT_PROFILE = DEV_PROFILE;

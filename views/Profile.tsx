@@ -3,22 +3,24 @@ import { ProfileData } from '../types';
 import { Button, Tag } from '../components/UI';
 import { Github, Linkedin, Mail, MapPin, Briefcase, Zap, LogOut, FileText, Globe, Instagram, Award, Phone } from 'lucide-react';
 
-// Base URL for GitHub Pages
+
 const BASE_URL = import.meta.env.BASE_URL || '/';
 const media = (path: string) => `${BASE_URL}media/${path}`;
 
 interface ProfileProps {
     profile: ProfileData;
     onLogout: () => void;
+    onOpenStory?: () => void;
 }
 
-const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
+const Profile: React.FC<ProfileProps> = ({ profile, onLogout, onOpenStory }) => {
     const { user } = profile;
     const isContentProfile = profile.id === 'content';
     const isDeveloperProfile = profile.id === 'developer';
     const isOperationsProfile = profile.id === 'operations';
 
-    // Handle PDF download for mobile compatibility
+    // cried
+    // dont touch please cause it was for some reason was downloading the code for everything in the viewport
     const handleDownload = async (pdfPath: string, fileName: string) => {
         try {
             const response = await fetch(pdfPath);
@@ -32,7 +34,7 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
             document.body.removeChild(link);
             window.URL.revokeObjectURL(url);
         } catch (error) {
-            // Fallback: open in new tab if download fails
+            //added a fallback as a failsafe to go to a blank page, way better than getting an html file which wont open on your mobile and you'd your device done got compromised 
             window.open(pdfPath, '_blank');
         }
     };
@@ -46,12 +48,14 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                 </button>
             </header>
 
-            {/* Header Info */}
             <div className="px-5 pt-6 pb-6">
                 <div className="flex items-start justify-between mb-4">
-                    <div className="w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-os-primary to-os-accent">
+                    <button
+                        onClick={onOpenStory}
+                        className="w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-os-primary to-os-accent cursor-pointer hover:scale-105 active:scale-95 transition-transform duration-200"
+                    >
                         <img src={user.avatarUrl} alt="Avatar" className="w-full h-full rounded-full border-2 border-os-bg object-cover" />
-                    </div>
+                    </button>
 
                     <div className="flex gap-4 flex-1 justify-end pt-2">
                         <div className="text-center">
@@ -62,7 +66,6 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                             <div className="font-bold text-lg text-os-text">{profile.explore.length}</div>
                             <div className="text-xs text-os-muted">{isContentProfile ? 'Works' : 'Skills'}</div>
                         </div>
-                        {/* Only show Roles stat if experience exists (it's empty for Content now) */}
                         <div className="text-center">
                             <div className="font-bold text-lg text-os-text">{isContentProfile ? profile.activities.filter(a => a.type !== 'experiment').length : (isOperationsProfile ? user.certifications?.length : user.experience.length)}</div>
                             <div className="text-xs text-os-muted">{isContentProfile ? 'Clients' : (isOperationsProfile ? 'Certs' : 'Roles')}</div>
@@ -76,21 +79,25 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                     {user.bio}
                 </p>
 
-                {/* Expertise Section - MOVED UP for Content Profile */}
                 {isContentProfile && (
                     <div className="mb-6">
                         <h3 className="text-sm font-bold text-os-text mb-3 font-display">
-                            Expertise
+                            Certification
                         </h3>
-                        <div className="flex flex-wrap gap-2">
-                            {user.skills.map(skill => (
-                                <Tag key={skill}>{skill}</Tag>
-                            ))}
-                        </div>
+                        <a
+                            href="https://drive.google.com/file/d/11s9_CrIlTDhfqEskAWiurCk8dPt2Ls5A/view?usp=sharing"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex items-center gap-3 bg-os-card p-3 rounded-lg border border-os-border hover:border-os-primary/50 hover:bg-os-border/20 transition-colors cursor-pointer"
+                        >
+                            <div className="p-1.5 bg-amber-500/10 text-amber-600 rounded-full flex-shrink-0">
+                                <Award size={16} />
+                            </div>
+                            <span className="text-sm font-medium text-os-text leading-tight">Publication Certificates</span>
+                        </a>
                     </div>
                 )}
 
-                {/* Certifications for Ops */}
                 {isOperationsProfile && user.certifications && (
                     <div className="mb-6">
                         <h3 className="text-sm font-bold text-os-text mb-3 font-display">Certifications</h3>
@@ -113,7 +120,6 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                     </div>
                 )}
 
-                {/* Experience Section (Standard) - Hidden for Content and Ops Profile as requested */}
                 {!isContentProfile && !isOperationsProfile && user.experience.length > 0 && (
                     <div className="mb-6">
                         <h3 className="text-sm font-bold text-os-text mb-3 font-display">Experience</h3>
@@ -134,7 +140,6 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                     </div>
                 )}
 
-                {/* Currently Working On (Focus) - REMOVED for Dev, Content, and Ops Profile */}
                 {user.currentlyWorkingOn && !isDeveloperProfile && !isContentProfile && !isOperationsProfile && (
                     <div className="mb-4 inline-flex items-center gap-2 bg-os-card border border-os-border rounded-full px-3 py-1.5 pr-4 shadow-sm hover:border-os-primary/50 transition-colors cursor-default">
                         <div className="flex items-center justify-center w-5 h-5 rounded-full bg-os-primary/10 text-os-primary">
@@ -152,7 +157,6 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                     <span className="flex items-center gap-1 text-green-500"><span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Open to work</span>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="flex gap-2 mb-8">
                     <Button
                         className="flex-1 py-2 text-sm bg-os-text text-os-bg hover:opacity-90 shadow-none"
@@ -165,7 +169,6 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                         className="flex-1 py-2 text-sm"
                         onClick={async () => {
                             const url = window.location.href;
-                            // Try native share first (better for mobile)
                             if (navigator.share) {
                                 try {
                                     await navigator.share({
@@ -174,10 +177,9 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                                     });
                                     return;
                                 } catch (err) {
-                                    // User cancelled or share failed, fall through to clipboard
                                 }
                             }
-                            // Fallback: copy to clipboard using textarea (works on mobile)
+                            // fallback: copy to clipboard using textarea (works on mobile)
                             try {
                                 const textarea = document.createElement('textarea');
                                 textarea.value = url;
@@ -198,7 +200,6 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                     </Button>
                 </div>
 
-                {/* Expertise Section - Legacy Position for other profiles */}
                 {!isContentProfile && !isDeveloperProfile && !isOperationsProfile && (
                     <div className="mb-8">
                         <h3 className="text-sm font-bold text-os-text mb-3 font-display">
@@ -212,10 +213,8 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                     </div>
                 )}
 
-                {/* Social Posts Grid */}
                 <h3 className="text-sm font-bold text-os-text mb-3 font-display">Connect</h3>
                 <div className="grid grid-cols-2 gap-2 mt-2">
-                    {/* Box 1: GitHub (Dev) / Portfolio (Ops) / Instagram (Content) */}
                     <a
                         href={isDeveloperProfile ? user.socials.github : (isOperationsProfile ? user.socials.portfolio : user.socials.github)}
                         target="_blank"
@@ -232,7 +231,6 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                         <span className="text-xs font-bold text-os-text">{isContentProfile ? 'Instagram' : (isOperationsProfile ? 'Portfolio' : 'GitHub')}</span>
                     </a>
 
-                    {/* Box 2: Resume (Dev) / LinkedIn (Ops & Content) */}
                     {isDeveloperProfile ? (
                         <button
                             onClick={() => handleDownload(media('resume_developer.pdf'), 'Durrani_Adil_Developer_Resume.pdf')}
@@ -248,15 +246,14 @@ const Profile: React.FC<ProfileProps> = ({ profile, onLogout }) => {
                         </a>
                     )}
 
-                    {/* Box 3: Email (All profiles) */}
                     <a href={`mailto:${user.socials.email}`} className="bg-os-card border border-os-border rounded-lg aspect-square flex flex-col items-center justify-center gap-2 hover:bg-os-border/20 transition-colors group">
                         <Mail size={32} className="text-os-muted group-hover:text-orange-500" />
                         <span className="text-xs font-bold text-os-text">Email</span>
                     </a>
 
-                    {/* Box 4: Portfolio (Dev) / Resume (Ops & Content) */}
+                    {/* cried here too */}
                     {isDeveloperProfile ? (
-                        <a href={user.socials.portfolio || '#'} target="_blank" rel="noreferrer" className="bg-os-card border border-os-border rounded-lg aspect-square flex flex-col items-center justify-center gap-2 hover:bg-os-border/20 transition-colors group">
+                        <a href="https://durraniadil.github.io/Portfolio-Portal/" target="_blank" rel="noreferrer" className="bg-os-card border border-os-border rounded-lg aspect-square flex flex-col items-center justify-center gap-2 hover:bg-os-border/20 transition-colors group">
                             <Globe size={32} className="text-os-muted group-hover:text-green-500" />
                             <span className="text-xs font-bold text-os-text">Portfolio</span>
                         </a>

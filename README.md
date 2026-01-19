@@ -222,4 +222,4 @@ This project is private and not licensed for public distribution or modification
 - GitHub: [DurraniAdil](https://github.com/DurraniAdil)
 - LinkedIn: [durraniadil13](https://www.linkedin.com/in/durraniadil13/)
 - Email: durraniadil13@gmail.com
-- Portfolio: 
+- Portfolio: [Portfolio-Portal](https://durraniadil.github.io/Portfolio-Portal/)

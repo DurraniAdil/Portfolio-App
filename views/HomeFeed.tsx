@@ -14,7 +14,7 @@ const StoryModal: React.FC<{ story: Story; onClose: () => void; onReply: (msg: s
   const [progress, setProgress] = useState(0);
   const [liked, setLiked] = useState(false);
   const [inputText, setInputText] = useState("");
-  const DURATION = 15000; // 15 seconds per story
+  const DURATION = 15000;
 
   useEffect(() => {
     const startTime = Date.now();
@@ -38,20 +38,26 @@ const StoryModal: React.FC<{ story: Story; onClose: () => void; onReply: (msg: s
     }
   };
 
+  const handleBackgroundClick = (e: React.MouseEvent) => {
+
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-[100] bg-black flex flex-col animate-fade-in">
-      {/* Story Header / Progress */}
       <div className="absolute top-0 left-0 right-0 z-20 p-2 pt-safe-top">
-        <div className="h-1 bg-white/30 rounded-full overflow-hidden mb-3">
+        <div className="h-1 bg-black/30 rounded-full overflow-hidden mb-3">
           <div
-            className="h-full bg-white transition-all duration-75 ease-linear"
+            className="h-full bg-black transition-all duration-75 ease-linear"
             style={{ width: `${progress}%` }}
           />
         </div>
         <div className="flex justify-between items-center px-1">
           <div className="flex items-center gap-3">
             <div className={`w-8 h-8 rounded-full ${story.color} p-[1.5px]`}>
-              <div className="w-full h-full bg-black rounded-full flex items-center justify-center text-sm overflow-hidden">
+              <div className="w-full h-full bg-white rounded-full flex items-center justify-center text-sm overflow-hidden border border-black/10">
                 {story.avatarImage ? (
                   <img src={story.avatarImage} alt={story.label} className="w-full h-full object-cover" />
                 ) : (
@@ -59,34 +65,39 @@ const StoryModal: React.FC<{ story: Story; onClose: () => void; onReply: (msg: s
                 )}
               </div>
             </div>
-            <span className="font-bold text-white text-sm">{story.label}</span>
-            <span className="text-white/60 text-xs">1h</span>
+            <span className="font-bold text-black text-sm">{story.label}</span>
+            <span className="text-black/60 text-xs">1h</span>
           </div>
-          <button onClick={onClose} className="text-white/80 hover:text-white">
+          <button onClick={onClose} className="text-black/80 hover:text-black p-2">
             <X size={24} />
           </button>
         </div>
       </div>
 
-      {/* Story Content - Full Screen Aesthetic */}
-      <div className={`flex-1 flex flex-col items-center justify-center relative overflow-hidden ${story.color}`}>
+      <div
+        className={`flex-1 flex flex-col items-center justify-center relative overflow-hidden ${story.color}`}
+        onClick={handleBackgroundClick}
+      >
         {story.storyImage ? (
           <>
-            {/* Blurred Background Layer */}
-            <img src={story.storyImage} alt="Background" className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-50 scale-110" />
-            {/* Main Content Layer - Responsive Contain */}
-            <div className="relative z-10 w-full h-full flex items-center justify-center p-4">
+            {/* blurred bg*/}
+            <img src={story.storyImage} alt="Background" className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-50 scale-110 pointer-events-none" />
+            {/* main content layer - responsive contain - clickable to close */}
+            <div
+              className="relative z-10 w-full h-full flex items-center justify-center p-4"
+              onClick={handleBackgroundClick}
+            >
               <img
                 src={story.storyImage}
                 alt="Story"
-                className="max-w-full max-h-full object-contain drop-shadow-2xl rounded-lg"
+                className="max-w-full max-h-full object-contain drop-shadow-2xl rounded-lg pointer-events-none"
               />
             </div>
           </>
         ) : (
           <>
-            <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]"></div>
-            <div className="relative z-10 p-8 w-full max-w-md text-center">
+            <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" onClick={handleBackgroundClick}></div>
+            <div className="relative z-10 p-8 w-full max-w-md text-center pointer-events-none">
               <div className="w-24 h-24 mx-auto bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-5xl mb-8 shadow-2xl border border-white/20">
                 {story.icon}
               </div>
@@ -106,27 +117,27 @@ const StoryModal: React.FC<{ story: Story; onClose: () => void; onReply: (msg: s
         )}
       </div>
 
-      {/* Interactive Footer */}
+      {/* responsive footer */}
       <div className="absolute bottom-0 left-0 right-0 p-4 pb-8 flex items-center gap-4 z-20 safe-bottom">
-        <div className="flex-1 h-11 border border-white/30 rounded-full flex items-center px-1 bg-black/20 backdrop-blur-sm">
+        <div className="flex-1 h-11 border border-black/30 rounded-full flex items-center px-1 bg-white/20 backdrop-blur-sm">
           <input
             type="text"
             placeholder="Send message..."
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={handleInputKey}
-            className="w-full bg-transparent border-none text-white text-sm px-4 focus:outline-none placeholder:text-white/70"
+            className="w-full bg-transparent border-none text-black text-sm px-4 focus:outline-none placeholder:text-black/50"
           />
         </div>
         <button
           onClick={() => setLiked(!liked)}
-          className={`transition-transform active:scale-75 ${liked ? 'text-red-500' : 'text-white'}`}
+          className={`transition-transform active:scale-75 ${liked ? 'text-red-500' : 'text-black'}`}
         >
           <Heart size={28} fill={liked ? "currentColor" : "none"} />
         </button>
         <button
           onClick={() => onReply("tuff")}
-          className="text-white hover:text-os-accent transition-colors active:scale-90"
+          className="text-black hover:text-black/70 transition-colors active:scale-90"
         >
           <Send size={28} className="-rotate-12" />
         </button>
@@ -134,6 +145,7 @@ const StoryModal: React.FC<{ story: Story; onClose: () => void; onReply: (msg: s
     </div>
   );
 }
+
 
 const ProjectCard: React.FC<{ project: Project; onOpen: () => void; onDM: (msg: string) => void }> = ({ project, onOpen, onDM }) => {
   const [liked, setLiked] = useState(false);
@@ -153,7 +165,7 @@ const ProjectCard: React.FC<{ project: Project; onOpen: () => void; onDM: (msg: 
   };
 
   const [isHidden, setIsHidden] = useState(false);
-  const [isReported, setIsReported] = useState(false); // Track if specifically reported
+  const [isReported, setIsReported] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const optionsRef = useRef<HTMLDivElement>(null);
 
@@ -199,7 +211,7 @@ const ProjectCard: React.FC<{ project: Project; onOpen: () => void; onDM: (msg: 
   return (
     <article className="w-full bg-os-bg border-b border-os-border pb-6 mb-2 transition-all duration-300 relative">
 
-      {/* Hidden Overlay */}
+      {/*hidden overlay*/}
       {isHidden && (
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in">
           <EyeOff size={48} className="text-white mb-4 opacity-50" />
@@ -213,7 +225,7 @@ const ProjectCard: React.FC<{ project: Project; onOpen: () => void; onDM: (msg: 
         </div>
       )}
 
-      {/* Main Content - Blurred when hidden */}
+      {/* main content */}
       <div className={`transition-all duration-500 ${isHidden ? 'filter blur-md opacity-50 pointer-events-none select-none grayscale' : ''}`}>
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 relative z-10">
@@ -231,7 +243,7 @@ const ProjectCard: React.FC<{ project: Project; onOpen: () => void; onDM: (msg: 
               <MoreHorizontal size={20} className="text-os-muted" />
             </button>
 
-            {/* Dropdown Menu */}
+            {/* dropdown menu */}
             {showOptions && (
               <div className="absolute right-0 top-full mt-1 w-40 bg-os-card border border-os-border rounded-xl shadow-2xl z-[60] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                 <button
@@ -251,7 +263,7 @@ const ProjectCard: React.FC<{ project: Project; onOpen: () => void; onDM: (msg: 
           </div>
         </div>
 
-        {/* Visual - Tappable with Micro-interaction */}
+        {/* visual */}
         <div
           className="relative w-full aspect-square sm:aspect-video bg-os-card overflow-hidden cursor-pointer group"
           onDoubleClick={handleDoubleTap}
@@ -264,7 +276,7 @@ const ProjectCard: React.FC<{ project: Project; onOpen: () => void; onDM: (msg: 
               loading="lazy"
               onClick={onOpen}
             />
-            {/* Big Heart Overlay Animation */}
+            {/* heart overlay on post when liked */}
             <div className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${showBigHeart ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
               <Heart size={100} className="text-white fill-white drop-shadow-2xl animate-pulse-slow" style={{ animationDuration: '0.5s' }} />
             </div>
@@ -276,7 +288,7 @@ const ProjectCard: React.FC<{ project: Project; onOpen: () => void; onDM: (msg: 
           </div>
         </div>
 
-        {/* Action Bar */}
+        {/* action bar */}
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button onClick={toggleLike} className={`transition-all active:scale-75 duration-200 ${liked ? 'text-red-500' : 'text-os-text hover:text-os-primary'}`}>
@@ -285,7 +297,7 @@ const ProjectCard: React.FC<{ project: Project; onOpen: () => void; onDM: (msg: 
             <button onClick={() => setCommentOpen(!commentOpen)} className="text-os-text hover:text-os-accent transition-colors active:scale-90 duration-150">
               <MessageCircle size={26} />
             </button>
-            {/* DM Button (Replaces Share) */}
+            {/* direct message button */}
             <button
               onClick={() => onDM(`Can we talk more about this?`)}
               className="text-os-text hover:text-os-accent transition-colors active:scale-90 duration-150"
@@ -302,7 +314,7 @@ const ProjectCard: React.FC<{ project: Project; onOpen: () => void; onDM: (msg: 
           <p className="text-sm font-bold text-os-text">{likesCount} likes</p>
         </div>
 
-        {/* Content */}
+        {/* content */}
         <div className="px-4">
           <h3 className="font-bold text-os-text text-base mb-1 cursor-pointer hover:opacity-80 transition-opacity font-display" onClick={onOpen}>
             {project.title}
@@ -312,14 +324,14 @@ const ProjectCard: React.FC<{ project: Project; onOpen: () => void; onDM: (msg: 
             {project.description}
           </p>
 
-          {/* Scrollable Tags */}
+          {/* scrollable tags */}
           <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 mb-2">
             {project.tags.map(tag => (
               <Tag key={tag}>{tag}</Tag>
             ))}
           </div>
 
-          {/* Comments Section */}
+          {/* comments section */}
           {comments.length > 0 && (
             <div className="mb-3 space-y-1">
               {comments.map((c, i) => (
@@ -331,7 +343,7 @@ const ProjectCard: React.FC<{ project: Project; onOpen: () => void; onDM: (msg: 
             </div>
           )}
 
-          {/* Comment Input */}
+          {/* comment input */}
           {commentOpen && (
             <div className="flex gap-2 mt-2 animate-fade-in items-center">
               <div className="w-6 h-6 rounded-full bg-neutral-700 flex-shrink-0"></div>
@@ -373,7 +385,7 @@ const HomeFeed: React.FC<HomeFeedProps> = ({ profile, onOpenProject, onOpenDM, o
 
   return (
     <div className="w-full pb-20 animate-fade-in bg-os-bg transition-colors duration-300">
-      {/* Sticky Header */}
+      {/* sticky ah header */}
       <header className="relative z-40 bg-os-bg/80 backdrop-blur-md border-b border-os-border h-14 flex items-center justify-between px-4 max-w-md mx-auto transition-colors duration-300">
         <span className="font-display font-bold text-lg tracking-tighter text-os-text">{profile.user.handle}</span>
         <button onClick={() => onOpenDM()} className="text-os-text hover:text-os-accent transition-colors active:scale-90">
@@ -384,7 +396,7 @@ const HomeFeed: React.FC<HomeFeedProps> = ({ profile, onOpenProject, onOpenDM, o
         </button>
       </header>
 
-      {/* Stories / Highlights - Populated from Profile */}
+      {/* stories*/}
       <div className="w-full overflow-x-auto no-scrollbar py-3 border-b border-os-border flex gap-4 px-4 mb-2">
         {profile.stories.map((story) => (
           <div key={story.id} onClick={() => setSelectedStory(story)} className="flex flex-col items-center gap-1 flex-shrink-0 cursor-pointer active:scale-95 transition-transform duration-200">
@@ -408,7 +420,7 @@ const HomeFeed: React.FC<HomeFeedProps> = ({ profile, onOpenProject, onOpenDM, o
         ))}
       </div>
 
-      {/* End of Feed */}
+      {/* end of feed */}
       <div className="py-8 flex flex-col items-center justify-center text-os-muted">
         <div className="w-12 h-12 border-2 border-os-border rounded-full flex items-center justify-center mb-4">
           <span className="text-xl text-os-primary">✓</span>

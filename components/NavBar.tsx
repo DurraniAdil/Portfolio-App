@@ -29,7 +29,7 @@ const NavBar: React.FC<NavBarProps> = ({ activeTab, onSwitch }) => {
             >
               <Icon
                 size={18}
-                className={`transition-colors duration-300 ${isActive ? 'text-white' : 'text-neutral-500'}`}
+                className={`transition-colors duration-300 ${isActive ? 'text-os-text' : 'text-os-muted'}`}
                 strokeWidth={isActive ? 2.5 : 2}
               />
               {isActive && (

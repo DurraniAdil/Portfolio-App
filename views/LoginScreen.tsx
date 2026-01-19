@@ -4,7 +4,7 @@ import { Button } from '../components/UI';
 import { PROFILES } from '../constants';
 import { ProfileData } from '../types';
 
-// Base URL for GitHub Pages
+// NEED TO LEARN THIS BY HEART ATP 
 const BASE_URL = import.meta.env.BASE_URL || '/';
 const media = (path: string) => `${BASE_URL}media/${path}`;
 
@@ -17,9 +17,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
     const [selectedProfile, setSelectedProfile] = useState<ProfileData | null>(null);
     const [password, setPassword] = useState('');
     const [isTransitioning, setIsTransitioning] = useState(false);
-    const [transitionStage, setTransitionStage] = useState(0); // For multi-step animations
+    const [transitionStage, setTransitionStage] = useState(0);
 
-    // OTP Simulation State
+    // OTP simulation 
     const [otp, setOtp] = useState<string | null>(null);
     const [showOtp, setShowOtp] = useState(false);
     const [generatingOtp, setGeneratingOtp] = useState(false);
@@ -31,15 +31,15 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
         if (generatingOtp) return;
         setGeneratingOtp(true);
 
-        // Simulate network request delay
+        // network delay simulation
         setTimeout(() => {
             const code = Math.floor(100000 + Math.random() * 900000).toString();
             setOtp(code);
             setGeneratingOtp(false);
             setShowOtp(true);
 
-            // Auto hide after 20s if not copied
-            setTimeout(() => setShowOtp(false), 20000);
+            // auto hide after 10s if not copied
+            setTimeout(() => setShowOtp(false), 10000);
         }, 1500);
     };
 
@@ -56,19 +56,18 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
 
         const handleFailure = () => {
             setCopyFeedback("Failed");
-            setTimeout(() => setCopyFeedback(null), 2000);
+            setTimeout(() => setCopyFeedback(null), 5000);
         };
 
         try {
             await navigator.clipboard.writeText(otp);
             handleSuccess();
         } catch (err) {
-            // Fallback for mobile/webview restrictions
             try {
                 const textArea = document.createElement("textarea");
                 textArea.value = otp;
 
-                // Avoid scrolling to bottom
+                // avoid scrolling to bottom
                 textArea.style.top = "0";
                 textArea.style.left = "0";
                 textArea.style.position = "fixed";
@@ -93,41 +92,41 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
         if (!selectedProfile) return;
 
         const input = password.trim();
-        // Validate: Check if input matches profile ID (case-insensitive) OR the generated OTP
+        // validate: check if input matches profile ID (case-insensitive) OR the generated OTP
         const isValid = input.toLowerCase() === selectedProfile.id || (otp && input === otp);
 
         if (isValid) {
-            // Trigger Transition
+            // trigger transition
             setIsTransitioning(true);
-            // Pass the valid Profile ID to the transition sequence -> login handler
+            // pass the valid Profile ID to the transition sequence -> login handler
             startTransitionSequence(selectedProfile.id);
         } else {
-            // Pass invalid input to parent to trigger error state
+            // pass invalid input to parent to trigger error state
             onLogin(input.toLowerCase());
         }
     };
 
     const startTransitionSequence = (profileId: string) => {
-        // Sequence timing varies by profile vibe
+        // sequence timing varies by profile vibe
         if (profileId === 'developer') {
-            // Matrix code fall -> Glitch -> Access
-            setTimeout(() => setTransitionStage(1), 500); // Show code
-            setTimeout(() => setTransitionStage(2), 2000); // Glitch/Success
-            setTimeout(() => onLogin(profileId), 2500); // Switch
+            // matrix code fall -> glitch -> access
+            setTimeout(() => setTransitionStage(1), 500); // show code
+            setTimeout(() => setTransitionStage(2), 2000); // glitch/success
+            setTimeout(() => onLogin(profileId), 2500); // switch
         } else if (profileId === 'operations') {
-            // Biometric scan -> Loading Circle -> Clean Wipe
-            setTimeout(() => setTransitionStage(1), 800); // Scan Complete
-            setTimeout(() => setTransitionStage(2), 1800); // Loading Data
-            setTimeout(() => onLogin(profileId), 2200); // Switch
+            // biometric scan -> loading circle -> clean wipe
+            setTimeout(() => setTransitionStage(1), 800); // scan complete
+            setTimeout(() => setTransitionStage(2), 1800); // loading data
+            setTimeout(() => onLogin(profileId), 2200); // switch
         } else {
-            // Ink spread / Fade -> Quote -> Enter
+            // ink spread / fade -> quote -> enter
             setTimeout(() => setTransitionStage(1), 1000); // Fade out UI
             setTimeout(() => setTransitionStage(2), 2000); // Show Quote
             setTimeout(() => onLogin(profileId), 3000); // Switch
         }
     };
 
-    // --- TRANSITION OVERLAYS ---
+    // --- transition overlays ---
 
     const renderDeveloperTransition = () => (
         <div className="absolute inset-0 z-50 bg-black font-mono flex flex-col items-center justify-center overflow-hidden">
@@ -173,11 +172,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
 
     const renderOperationsTransition = () => (
         <div className="absolute inset-0 z-50 bg-slate-900 flex flex-col items-center justify-center transition-opacity duration-500 overflow-hidden">
-            {/* Radar Scan Effect */}
+            {/* radar scan effect */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#0f172a_80%)] z-10"></div>
 
             <div className="relative z-20">
-                {/* Spinning Rings */}
+                {/* spinning rings */}
                 <div className="absolute inset-[-20px] rounded-full border border-blue-500/30 animate-[spin_4s_linear_infinite]"></div>
                 <div className="absolute inset-[-40px] rounded-full border border-cyan-500/20 animate-[spin_7s_linear_infinite_reverse]"></div>
 
@@ -187,7 +186,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
                         alt="Operations"
                         className="w-full h-full object-cover opacity-80"
                     />
-                    {/* Scanning Bar Overlay */}
+                    {/* scanning bar overlay */}
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-400/30 to-transparent w-full h-full animate-[scan_1.5s_linear_infinite] opacity-50"></div>
                 </div>
             </div>
@@ -211,7 +210,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
     const renderContentTransition = () => (
         <div className="absolute inset-0 z-50 bg-[#fbf7f0] flex flex-col items-center justify-center transition-all duration-1000 overflow-hidden">
 
-            {/* Ink Transition Background */}
+            {/* ink transition background */}
             <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]"></div>
 
             <div className="relative z-10 flex flex-col items-center">
@@ -238,19 +237,19 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
     );
 
 
-    // --- MAIN RENDER ---
+    // --- OG RENDER ---
 
-    // View 2: Password Entry
+    // view 2: password entry
     if (selectedProfile) {
         return (
             <div className="flex flex-col h-[100dvh] bg-black text-white relative animate-fade-in overflow-hidden">
 
-                {/* TRANSITION LAYER */}
+                {/* transition layer */}
                 {isTransitioning && selectedProfile.id === 'developer' && renderDeveloperTransition()}
                 {isTransitioning && selectedProfile.id === 'operations' && renderOperationsTransition()}
                 {isTransitioning && selectedProfile.id === 'content' && renderContentTransition()}
 
-                {/* OTP TOAST NOTIFICATION */}
+                {/* otp toast notification */}
                 {showOtp && (
                     <div className="absolute top-16 left-4 right-4 z-[60] animate-slide-up">
                         <div className="bg-neutral-800/90 backdrop-blur-md border border-neutral-700 rounded-2xl p-4 shadow-2xl flex flex-col items-center gap-2">
@@ -269,7 +268,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
                     </div>
                 )}
 
-                {/* Back Button */}
+                {/* back button */}
                 <button
                     onClick={() => { setSelectedProfile(null); setPassword(''); setShowOtp(false); }}
                     className="absolute top-6 left-4 text-white p-2 z-20 hover:opacity-70 transition-opacity"
@@ -277,7 +276,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
                     <ArrowLeft size={24} />
                 </button>
 
-                {/* Background Blur */}
+                {/* background blur */}
                 <div className="absolute inset-0 opacity-10 pointer-events-none">
                     <div className={`absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[120px] bg-gradient-to-b ${selectedProfile.theme.colors.primary} to-transparent`}></div>
                 </div>
@@ -329,11 +328,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
             </div>
         )
     }
-
-    // View 1: Account Selection
+    //for some reason i think i've messed up the code
+    //but it works fine so we dont check it and keep the view one and two as they are
+    //cause it done spiraled out and made a new branch for some reason i think which i cant do anything about with absolutely messing up the code
+    // view 1: account selection
     return (
         <div className="flex flex-col h-[100dvh] bg-black text-white px-6 animate-fade-in relative overflow-hidden">
-            {/* Background gradient effects */}
+            {/* background gradient effects */}
             <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
                 <div className="absolute top-[-20%] left-[-20%] w-[500px] h-[500px] bg-indigo-900/30 rounded-full blur-[100px]"></div>
                 <div className="absolute bottom-[-20%] right-[-20%] w-[500px] h-[500px] bg-fuchsia-900/20 rounded-full blur-[100px]"></div>
@@ -341,7 +342,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
 
             <div className="flex-1 flex flex-col justify-center w-full max-w-sm mx-auto z-10">
                 <div className="flex justify-center mb-8 md:mb-16 scale-100 md:scale-125">
-                    {/* App Logo / Title */}
+                    {/* logo/title*/}
                     <h1 className="text-4xl font-display font-bold tracking-tighter italic bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
                         Adil<span className="text-neutral-600 not-italic">.OS</span>
                     </h1>
@@ -372,6 +373,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
 
                 <div className="mt-8 flex justify-center">
                     <button onClick={() => window.open('https://durraniadil.github.io/Portfolio-Portal/')} className="flex items-center gap-2 text-blue-500 text-sm font-semibold opacity-80 hover:opacity-100 transition-opacity">
+                        {/* done messed and branched out for some reason but it works fine now, think it was the deployment issue*/}
                         <Plus size={16} /> Log in using another device
                     </button>
                 </div>

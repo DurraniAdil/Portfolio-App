@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { ProfileData } from '../types';
-import { Search } from 'lucide-react';
+import { Search, ChevronRight } from 'lucide-react';
 
 interface ExploreProps {
     profile: ProfileData;
@@ -12,17 +12,35 @@ const Explore: React.FC<ExploreProps> = ({ profile }) => {
 
     const isBentoLayout = profile.id === 'developer' || profile.id === 'content' || profile.id === 'operations';
 
-    // Filter items for Bento Layout
-    const filteredExploreItems = useMemo(() => {
-        if (!searchQuery) return profile.explore;
-        const q = searchQuery.toLowerCase();
-        return profile.explore.filter(item =>
-            item.title.toLowerCase().includes(q) ||
-            item.category.toLowerCase().includes(q)
-        );
-    }, [profile.explore, searchQuery]);
+    // get unique categories for filtering
+    const categories = useMemo(() => {
+        if (!isBentoLayout) return [];
+        const cats = new Set(profile.explore.map(item => item.category));
+        return ["All", ...Array.from(cats)];
+    }, [profile.explore, isBentoLayout]);
 
-    // Extract all unique tags from projects (Legacy logic for non-dev/content/ops profiles)
+    // filter items for bento layout
+    const filteredExploreItems = useMemo(() => {
+        let items = profile.explore;
+
+        // category filter
+        if (activeFilter !== "All") {
+            items = items.filter(item => item.category === activeFilter);
+        }
+
+        // search filter
+        if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            items = items.filter(item =>
+                item.title.toLowerCase().includes(q) ||
+                item.category.toLowerCase().includes(q)
+            );
+        }
+
+        return items;
+    }, [profile.explore, searchQuery, activeFilter]);
+
+    // extract all unique tags from projects (legacy logic for non-dev/content/ops profiles)
     const allTags = useMemo(() => {
         if (isBentoLayout) return [];
         const tags = new Set<string>();
@@ -30,16 +48,14 @@ const Explore: React.FC<ExploreProps> = ({ profile }) => {
         return ["All", ...Array.from(tags)];
     }, [profile.projects, isBentoLayout]);
 
-    // Filter projects based on selected tag AND search query
+    // filter projects based on selected tag AND search query
     const filteredProjects = useMemo(() => {
         let projects = profile.projects;
 
-        // 1. Tag Filter
         if (activeFilter !== "All") {
             projects = projects.filter(p => p.tags.includes(activeFilter));
         }
 
-        // 2. Search Filter
         if (searchQuery) {
             const q = searchQuery.toLowerCase();
             projects = projects.filter(p =>
@@ -52,91 +68,164 @@ const Explore: React.FC<ExploreProps> = ({ profile }) => {
         return projects;
     }, [activeFilter, profile.projects, searchQuery]);
 
-    // Helper to determine bento grid spans based on index
-    const getBentoClass = (index: number) => {
-        // Pattern: Big Square, Small, Small, Tall, Wide, Small, Small...
-        const pattern = [
-            'col-span-2 row-span-1', // 0: Wide
-            'col-span-1 row-span-2', // 1: Tall
-            'col-span-1 row-span-1', // 2: Small
-            'col-span-1 row-span-1', // 3: Small
-            'col-span-2 row-span-2', // 4: Big
-            'col-span-1 row-span-1', // 5: Small
-            'col-span-1 row-span-1', // 6: Small
-            'col-span-2 row-span-1', // 7: Wide
-            'col-span-1 row-span-1', // 8: Small
-            'col-span-1 row-span-2', // 9: Tall
-            'col-span-2 row-span-1', // 10: Wide
-        ];
-        // Repeat pattern if index exceeds length
-        return pattern[index % pattern.length] || 'col-span-1 row-span-1';
+    // get category color for visual distinction
+    const getCategoryColor = (category: string) => {
+        const colors: Record<string, string> = {
+            'Language': 'from-blue-500/20 to-blue-600/5',
+            'Framework': 'from-purple-500/20 to-purple-600/5',
+            'Library': 'from-cyan-500/20 to-cyan-600/5',
+            'Tool': 'from-green-500/20 to-green-600/5',
+            'Style': 'from-pink-500/20 to-pink-600/5',
+            'State': 'from-violet-500/20 to-violet-600/5',
+            'Backend': 'from-orange-500/20 to-orange-600/5',
+            'Platform': 'from-slate-500/20 to-slate-600/5',
+            'Design': 'from-rose-500/20 to-rose-600/5',
+            'Cloud': 'from-sky-500/20 to-sky-600/5',
+            'Animation': 'from-indigo-500/20 to-indigo-600/5',
+            'Runtime': 'from-emerald-500/20 to-emerald-600/5',
+            'Expertise': 'from-amber-500/20 to-amber-600/5',
+            'Poetry': 'from-rose-500/20 to-rose-600/5',
+            'Fiction': 'from-purple-500/20 to-purple-600/5',
+            'Non-Fiction': 'from-blue-500/20 to-blue-600/5',
+            'Publication': 'from-emerald-500/20 to-emerald-600/5',
+            'Award': 'from-yellow-500/20 to-yellow-600/5',
+            'Achievement': 'from-orange-500/20 to-orange-600/5',
+            'Co-Author': 'from-teal-500/20 to-teal-600/5',
+            'Ops': 'from-blue-500/20 to-blue-600/5',
+            'HR': 'from-pink-500/20 to-pink-600/5',
+            'Tools': 'from-green-500/20 to-green-600/5',
+        };
+        return colors[category] || 'from-os-primary/20 to-os-primary/5';
     };
 
     const getExploreTitle = () => {
         if (profile.id === 'developer') return "Skills & Tools";
-        if (profile.id === 'content') return "Works & Certifications";
+        if (profile.id === 'content') return "Works & Expertise";
         if (profile.id === 'operations') return "Skills & Tools";
         return "Explore";
     }
 
     return (
         <div className="w-full min-h-screen pb-24 pt-4 animate-fade-in bg-os-bg transition-colors duration-300">
-            {/* Search Bar - Kept for aesthetics */}
-            <div className="px-4 mb-4 sticky top-4 z-30">
+            {/* head */}
+            <div className="px-4 mb-4">
+                <h2 className="text-2xl font-bold text-os-text font-display">{getExploreTitle()}</h2>
+                <p className="text-sm text-os-muted mt-1">
+                    {profile.id === 'developer' ? 'Technologies I work with' :
+                        profile.id === 'content' ? 'My creative portfolio' :
+                            profile.id === 'operations' ? 'Competencies & Tools' : 'Explore my work'}
+                </p>
+            </div>
+
+            {/* search bar - non sticky, scrolls away with when scrolling */}
+            <div className="px-4 mb-4">
                 <div className="relative group">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-os-muted transition-colors group-focus-within:text-os-primary" size={16} />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-os-muted transition-colors group-focus-within:text-os-primary" size={18} />
                     <input
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder={isBentoLayout ? "Search..." : "Search projects..."}
-                        className="w-full bg-os-card border border-os-border rounded-xl py-2.5 pl-10 pr-4 text-sm text-os-text focus:outline-none focus:border-os-primary transition-all shadow-sm focus:shadow-os-primary/20 placeholder:text-os-muted"
+                        placeholder={isBentoLayout ? "Search skills..." : "Search projects..."}
+                        className="w-full bg-os-card border border-os-border rounded-2xl py-3 pl-12 pr-4 text-sm text-os-text focus:outline-none focus:border-os-primary focus:ring-2 focus:ring-os-primary/20 transition-all shadow-sm placeholder:text-os-muted"
                     />
                 </div>
             </div>
 
             {isBentoLayout ? (
-                // Developer/Content/Ops Profile: Bento Grid
                 <div className="px-4">
-                    <h3 className="text-sm font-bold text-os-muted uppercase tracking-wider mb-4 font-mono">{getExploreTitle()}</h3>
-                    <div className="grid grid-cols-3 gap-3 auto-rows-[100px] grid-flow-dense">
-                        {filteredExploreItems.map((item, index) => (
+                    {/* filter pills*/}
+                    <div className="flex gap-2 overflow-x-auto no-scrollbar mb-5 pb-1">
+                        {categories.map(cat => (
+                            <button
+                                key={cat}
+                                onClick={() => setActiveFilter(cat)}
+                                className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 active:scale-95 ${activeFilter === cat
+                                    ? 'bg-os-text text-os-bg shadow-lg'
+                                    : 'bg-os-card border border-os-border text-os-muted hover:text-os-text hover:border-os-primary/50'
+                                    }`}
+                            >
+                                {cat}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* responsive grid */}
+                    <div className="flex flex-wrap -mx-1">
+                        {filteredExploreItems.map((item) => (
                             <div
                                 key={item.id}
-                                className={`relative bg-os-card border border-os-border rounded-2xl p-4 flex flex-col justify-between overflow-hidden group hover:border-os-primary/50 transition-all duration-300 ${getBentoClass(index)}`}
+                                className="w-1/2 p-1"
                             >
-                                {/* Background Decoration */}
-                                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-white/5 to-transparent rounded-full blur-2xl -translate-y-8 translate-x-8 group-hover:from-os-primary/10 transition-colors"></div>
+                                <div className="relative bg-os-card border border-os-border rounded-xl overflow-hidden group cursor-pointer transition-all duration-300 hover:border-os-primary/50 hover:shadow-lg">
+                                    {/* gradient background on hover */}
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryColor(item.category)} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
 
-                                <div className="relative z-10 flex justify-between items-start">
-                                    <div className="w-10 h-10 rounded-xl bg-neutral-800/50 flex items-center justify-center p-2 backdrop-blur-sm border border-white/5 group-hover:scale-110 transition-transform duration-300 text-os-text">
-                                        {item.icon ? (
-                                            <item.icon className="w-full h-full object-contain" strokeWidth={1.5} />
-                                        ) : (
-                                            <img src={item.imageUrl} alt={item.title} className="w-full h-full object-contain" />
-                                        )}
+                                    {/* content - auto-height based on content */}
+                                    <div className="relative z-10 p-4">
+                                        {/* top row: icon + category */}
+                                        <div className="flex justify-between items-start mb-3">
+                                            <div className="w-11 h-11 rounded-xl bg-os-bg/80 flex items-center justify-center border border-os-border group-hover:border-os-primary/30 group-hover:scale-105 transition-all duration-300">
+                                                {item.icon ? (
+                                                    <item.icon className="w-5 h-5 text-os-text" strokeWidth={1.5} />
+                                                ) : (
+                                                    <img src={item.imageUrl} alt={item.title} className="w-full h-full object-contain p-1.5" />
+                                                )}
+                                            </div>
+                                            <span className="text-[9px] font-mono text-os-primary font-bold uppercase tracking-wider bg-os-primary/10 px-2 py-1 rounded-full">
+                                                {item.category}
+                                            </span>
+                                        </div>
+
+                                        {/* title wraps naturally */}
+                                        <h4 className="font-bold text-os-text text-sm leading-tight group-hover:text-os-primary transition-colors duration-300">
+                                            {item.title}
+                                        </h4>
                                     </div>
-                                    {/* Only show category on larger blocks */}
-                                    {(getBentoClass(index).includes('span-2')) && (
-                                        <span className="text-[10px] font-mono text-os-muted uppercase tracking-wider bg-black/20 px-2 py-0.5 rounded-full border border-white/5">
-                                            {item.category}
-                                        </span>
-                                    )}
-                                </div>
-
-                                <div className="relative z-10 mt-auto">
-                                    <h4 className={`font-bold text-os-text leading-tight group-hover:text-os-primary transition-colors ${getBentoClass(index).includes('span-2') ? 'text-lg' : 'text-xs'}`}>
-                                        {item.title}
-                                    </h4>
                                 </div>
                             </div>
                         ))}
                     </div>
+
+                    {/* empty state */}
+                    {filteredExploreItems.length === 0 && (
+                        <div className="flex flex-col items-center justify-center py-16 text-os-muted">
+                            <Search size={40} className="opacity-30 mb-4" />
+                            <p className="text-sm">No items found</p>
+                            <button
+                                onClick={() => { setActiveFilter("All"); setSearchQuery(""); }}
+                                className="mt-3 text-os-primary text-sm hover:underline"
+                            >
+                                Clear Filters
+                            </button>
+                        </div>
+                    )}
+
+                    {/* stats for footer */}
+                    {filteredExploreItems.length > 0 && (
+                        <div className="mt-8 pt-6 border-t border-os-border">
+                            <div className="flex justify-around text-center">
+                                <div>
+                                    <div className="text-2xl font-bold text-os-text">{profile.explore.length}</div>
+                                    <div className="text-xs text-os-muted">Total Items</div>
+                                </div>
+                                <div>
+                                    <div className="text-2xl font-bold text-os-primary">{categories.length - 1}</div>
+                                    <div className="text-xs text-os-muted">Categories</div>
+                                </div>
+                                <div>
+                                    <div className="text-2xl font-bold text-os-text">
+                                        {profile.id === 'developer' ? '3+' : profile.id === 'content' ? '300+' : '5+'}
+                                    </div>
+                                    <div className="text-xs text-os-muted">
+                                        {profile.id === 'developer' ? 'Years Exp' : profile.id === 'content' ? 'Works' : 'Years Exp'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             ) : (
-                // Other Profiles: Project Grid (Unchanged)
                 <>
-                    {/* Filters */}
                     <div className="flex gap-2 px-4 overflow-x-auto no-scrollbar mb-4 pb-2">
                         {allTags.map(tag => (
                             <button
@@ -152,14 +241,11 @@ const Explore: React.FC<ExploreProps> = ({ profile }) => {
                         ))}
                     </div>
 
-                    {/* Grid of Projects */}
                     <div className="grid grid-cols-2 gap-1 px-1">
                         {filteredProjects.map((project, index) => (
                             <div
                                 key={project.id}
-                                className={`relative group aspect-square bg-os-card overflow-hidden cursor-pointer ${
-                                    // Make the first item span 2 columns if it's the 'All' view for variety, else standard grid
-                                    (activeFilter === "All" && index === 0) ? 'col-span-2 aspect-video' : ''
+                                className={`relative group aspect-square bg-os-card overflow-hidden cursor-pointer ${(activeFilter === "All" && index === 0) ? 'col-span-2 aspect-video' : ''
                                     }`}
                             >
                                 <img
@@ -176,12 +262,10 @@ const Explore: React.FC<ExploreProps> = ({ profile }) => {
                                         ))}
                                     </div>
                                 </div>
-                                {/* Tag indicator for mobile touch (always visible small gradient or similar if hover not available) */}
                                 <div className="absolute inset-0 bg-black/10 group-active:bg-black/30 transition-colors" />
                             </div>
                         ))}
 
-                        {/* Filler for 'All' View */}
                         {activeFilter === "All" && profile.explore.map((item) => (
                             <div key={item.id} className="relative group aspect-square bg-os-card overflow-hidden">
                                 <div className="w-full h-full p-8 flex items-center justify-center bg-os-bg/50">

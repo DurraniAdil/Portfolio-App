@@ -1,13 +1,13 @@
 import React from 'react';
 
-export const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary' | 'ghost' | 'icon' }> = ({ 
-  children, 
-  variant = 'primary', 
-  className = '', 
-  ...props 
+export const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary' | 'ghost' | 'icon' }> = ({
+  children,
+  variant = 'primary',
+  className = '',
+  ...props
 }) => {
   const baseStyles = "font-medium transition-all duration-200 active:scale-95 flex items-center justify-center gap-2";
-  
+
   const variants = {
     primary: "bg-os-primary text-white rounded-lg px-4 py-3 shadow-lg shadow-os-primary/20 hover:opacity-90",
     secondary: "bg-os-card border border-os-border text-os-text rounded-lg px-4 py-3 hover:bg-os-border/20",

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ProfileData, ActivityItem } from '../types';
-import { GitCommit, Zap, Beaker, Award, PenTool, ClipboardCheck } from 'lucide-react';
+import { GitCommit, Zap, Beaker, Award, PenTool, ClipboardCheck, ChevronDown } from 'lucide-react';
 
 interface ActivityProps {
   profile: ProfileData;
@@ -19,39 +19,72 @@ const ActivityIcon: React.FC<{ type: ActivityItem['type'] }> = ({ type }) => {
 };
 
 const Activity: React.FC<ActivityProps> = ({ profile }) => {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const toggleExpand = (id: string) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
+
   return (
     <div className="w-full min-h-screen pb-24 pt-16 px-4 animate-fade-in bg-os-bg transition-colors duration-300">
-       <header className="fixed top-0 left-0 right-0 z-30 bg-os-bg/90 backdrop-blur-md h-14 flex items-center border-b border-os-border px-4 max-w-md mx-auto transition-colors duration-300">
+      <header className="fixed top-0 left-0 right-0 z-30 bg-os-bg/90 backdrop-blur-md h-14 flex items-center border-b border-os-border px-4 max-w-md mx-auto transition-colors duration-300">
         <h2 className="text-xl font-bold text-os-text font-display">Activity</h2>
       </header>
 
-      <div className="relative border-l border-os-border ml-3 my-4 space-y-8">
-        {profile.activities.map((item) => (
-          <div key={item.id} className="relative pl-8">
-            {/* Dot on timeline */}
-            <div className="absolute -left-[19px] top-1 bg-os-bg p-1 transition-colors duration-300">
-                <ActivityIcon type={item.type} />
-            </div>
+      <div className="relative border-l border-os-border ml-3 my-4 space-y-4">
+        {profile.activities.map((item) => {
+          const isExpanded = expandedId === item.id;
 
-            <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                    <span className="text-xs text-os-muted font-mono">{item.date}</span>
-                    <span className="text-[10px] uppercase tracking-wider font-bold text-os-primary border border-os-primary/20 px-1.5 py-0.5 rounded">
+          return (
+            <div key={item.id} className="relative pl-8">
+              {/* dot*/}
+              <div className="absolute -left-[19px] top-1 bg-os-bg p-1 transition-colors duration-300">
+                <ActivityIcon type={item.type} />
+              </div>
+
+              {/* cards click*/}
+              <div
+                onClick={() => toggleExpand(item.id)}
+                className="cursor-pointer group"
+              >
+                <div className="flex flex-col gap-2 p-3 -ml-3 rounded-lg hover:bg-os-card/50 transition-all duration-200">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-os-muted font-mono">{item.date}</span>
+                      <span className="text-[10px] uppercase tracking-wider font-bold text-os-primary border border-os-primary/20 px-1.5 py-0.5 rounded">
                         {item.type}
-                    </span>
-                </div>
-                
-                <h3 className="text-base font-semibold text-os-text leading-tight">{item.title}</h3>
-                <p className="text-sm text-os-muted leading-relaxed">{item.description}</p>
-                
-                {item.imageUrl && (
-                    <div className="mt-2 w-full h-32 rounded-lg overflow-hidden border border-os-border">
-                        <img src={item.imageUrl} alt="preview" className="w-full h-full object-cover" />
+                      </span>
                     </div>
-                )}
+                    <ChevronDown
+                      size={16}
+                      className={`text-os-muted transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+                    />
+                  </div>
+
+                  <h3 className="text-base font-semibold text-os-text leading-tight group-hover:text-os-primary transition-colors">
+                    {item.title}
+                  </h3>
+
+                  {/* accordion */}
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                      }`}
+                  >
+                    <p className="text-sm text-os-muted leading-relaxed pt-1 pb-2">
+                      {item.description}
+                    </p>
+
+                    {item.imageUrl && (
+                      <div className="mt-2 w-full h-32 rounded-lg overflow-hidden border border-os-border">
+                        <img src={item.imageUrl} alt="preview" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
