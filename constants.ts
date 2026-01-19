@@ -15,11 +15,10 @@ const SHARED_SOCIALS = {
   github: "https://github.com/DurraniAdil",
   linkedin: "https://www.linkedin.com/in/durraniadil13/",
   email: "durraniadil13@gmail.com",
-  portfolio: "https://ibneadil.com" // Assuming this based on project list
+  portfolio: "durraniadil.github.io/Portfolio-Portal/"
 };
 
-// Helper to generate skill items for Explore
-// Updated to use Simple Icons CDN for authentic tech logos
+
 const createSkill = (id: string, title: string, category: string, iconSlug?: string, color?: string) => ({
   id,
   title,

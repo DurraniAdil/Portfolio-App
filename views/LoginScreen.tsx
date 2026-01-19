@@ -371,7 +371,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
                 </div>
 
                 <div className="mt-8 flex justify-center">
-                    <button onClick={() => window.open('https://durraniadil.github.io/Portfolio-Portal/', '_blank')} className="flex items-center gap-2 text-blue-500 text-sm font-semibold opacity-80 hover:opacity-100 transition-opacity">
+                    <button onClick={() => window.open('https://durraniadil.github.io/Portfolio-Portal/')} className="flex items-center gap-2 text-blue-500 text-sm font-semibold opacity-80 hover:opacity-100 transition-opacity">
                         <Plus size={16} /> Log in using another device
                     </button>
                 </div>
