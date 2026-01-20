@@ -223,3 +223,4 @@ This project is private and not licensed for public distribution or modification
 - LinkedIn: [durraniadil13](https://www.linkedin.com/in/durraniadil13/)
 - Email: durraniadil13@gmail.com
 - Portfolio: [Portfolio-Portal](https://durraniadil.github.io/Portfolio-Portal/)
+- Larger Screen Optimised Version Of This: [Portfolio-OS].(https://durraniadil.github.io/Portfolio-OS/)
