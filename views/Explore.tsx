@@ -117,19 +117,7 @@ const Explore: React.FC<ExploreProps> = ({ profile }) => {
                 </p>
             </div>
 
-            {/* search bar - non sticky, scrolls away with when scrolling */}
-            <div className="px-4 mb-4">
-                <div className="relative group">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-os-muted transition-colors group-focus-within:text-os-primary" size={18} />
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder={isBentoLayout ? "Search skills..." : "Search projects..."}
-                        className="w-full bg-os-card border border-os-border rounded-2xl py-3 pl-12 pr-4 text-sm text-os-text focus:outline-none focus:border-os-primary focus:ring-2 focus:ring-os-primary/20 transition-all shadow-sm placeholder:text-os-muted"
-                    />
-                </div>
-            </div>
+
 
             {isBentoLayout ? (
                 <div className="px-4">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Send, Phone, Video, X } from 'lucide-react';
+import { ArrowLeft, Send, Phone, Video, X, Mail, MessageSquare } from 'lucide-react';
 import { UserProfile } from '../types';
 import emailjs from '@emailjs/browser';
 
@@ -27,9 +27,14 @@ const AUTO_REPLIES = [
   "Thanks for reaching out! I've received your message and will get back to you shortly.",
   "Got it! I'll review this and respond as soon as I can. Thanks for connecting!",
   "Message received! Looking forward to discussing this further. Stay tuned!",
-  "Hey! Thanks for your interest. I'll circle back to you within 24 hours.",
+  "Hey! Thanks for your interest. I'll circle back to you within 24 hours. 🙌",
   "Noted! Your message has been delivered. Expect a response soon!",
 ];
+
+// Email validation regex
+const isValidEmail = (email: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
 
 const DirectMessage: React.FC<DirectMessageProps> = ({ user, onBack, initialMessage }) => {
   // storage key 
@@ -56,10 +61,12 @@ const DirectMessage: React.FC<DirectMessageProps> = ({ user, onBack, initialMess
     ];
   };
 
-  const [inputText, setInputText] = useState(initialMessage || user.dmTemplate);
+  const [email, setEmail] = useState('');
+  const [requestText, setRequestText] = useState('');
   const [messages, setMessages] = useState<Message[]>(loadMessages);
   const [showVideoToast, setShowVideoToast] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [emailError, setEmailError] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const hasAutoSentRef = useRef(false);
@@ -68,20 +75,16 @@ const DirectMessage: React.FC<DirectMessageProps> = ({ user, onBack, initialMess
   const adjustTextareaHeight = () => {
     const textarea = textareaRef.current;
     if (textarea) {
-      // auto correction for scroll height
       textarea.style.height = 'auto';
-      // new height maths 
       const newHeight = Math.min(Math.max(textarea.scrollHeight, 44), 120);
       textarea.style.height = `${newHeight}px`;
     }
   };
 
-  // Adjusting height
   useEffect(() => {
     adjustTextareaHeight();
-  }, [inputText]);
+  }, [requestText]);
 
-  // adjusting height on initial load
   useEffect(() => {
     adjustTextareaHeight();
   }, []);
@@ -103,12 +106,12 @@ const DirectMessage: React.FC<DirectMessageProps> = ({ user, onBack, initialMess
     scrollToBottom();
   }, [messages]);
 
-  // auto send message from dm to story
+  // auto send message from story (NO EmailJS, just display in chat)
   useEffect(() => {
     if (initialMessage && !hasAutoSentRef.current) {
       hasAutoSentRef.current = true;
       setTimeout(() => {
-        handleSendMessage(initialMessage);
+        handleStoryMessage(initialMessage);
       }, 300);
     }
   }, [initialMessage]);
@@ -118,23 +121,64 @@ const DirectMessage: React.FC<DirectMessageProps> = ({ user, onBack, initialMess
     return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  // sending message with EmailJS
-  const handleSendMessage = async (text: string) => {
-    if (!text.trim()) return;
-
+  // Handle story message (NO EmailJS - just display in chat)
+  const handleStoryMessage = (text: string) => {
     const msgId = Date.now().toString();
+
+    const userMsg: Message = {
+      id: msgId,
+      text: text.trim(),
+      sender: 'me',
+      time: getCurrentTime(),
+      status: 'delivered'
+    };
+
+    setMessages(prev => [...prev, userMsg]);
+
+    // Send auto-reply after delay
+    setTimeout(() => {
+      const randomReply = AUTO_REPLIES[Math.floor(Math.random() * AUTO_REPLIES.length)];
+      const replyMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        text: randomReply,
+        sender: 'them',
+        time: getCurrentTime()
+      };
+      setMessages(prev => [...prev, replyMsg]);
+    }, 1500 + Math.random() * 1000);
+  };
+
+  // sending message with EmailJS (requires valid email + request)
+  const handleSendMessage = async () => {
+    // Validate email
+    if (!email.trim()) {
+      setEmailError('Email is required');
+      return;
+    }
+    if (!isValidEmail(email.trim())) {
+      setEmailError('Please enter a valid email');
+      return;
+    }
+    if (!requestText.trim()) {
+      return;
+    }
+
+    setEmailError('');
+    const msgId = Date.now().toString();
+    const fullMessage = `📧 ${email}\n\n${requestText.trim()}`;
 
     // add message to UI immediately
     const userMsg: Message = {
       id: msgId,
-      text: text.trim(),
+      text: fullMessage,
       sender: 'me',
       time: getCurrentTime(),
       status: 'sending'
     };
 
     setMessages(prev => [...prev, userMsg]);
-    setInputText('');
+    setEmail('');
+    setRequestText('');
     setIsSending(true);
 
     try {
@@ -144,18 +188,18 @@ const DirectMessage: React.FC<DirectMessageProps> = ({ user, onBack, initialMess
         EMAILJS_TEMPLATE_ID,
         {
           name: 'Portfolio Visitor',
-          email: 'visitor@portfolio.app',
+          email: email.trim(),
           from_name: 'Portfolio DM',
-          from_email: 'dm@portfolio.app',
+          from_email: email.trim(),
           subject: `DM via ${user.handle} Profile`,
-          message: text,
+          message: requestText.trim(),
           time: new Date().toLocaleString(),
           role_type: user.handle,
           project_link: '—',
           team_size: '—',
           operations_scope: '—',
           content_type: 'DM',
-          word_count: text.split(' ').length.toString(),
+          word_count: requestText.split(' ').length.toString(),
         },
         EMAILJS_PUBLIC_KEY
       );
@@ -215,7 +259,7 @@ const DirectMessage: React.FC<DirectMessageProps> = ({ user, onBack, initialMess
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSendMessage(inputText);
+      handleSendMessage();
     }
   };
 
@@ -229,6 +273,9 @@ const DirectMessage: React.FC<DirectMessageProps> = ({ user, onBack, initialMess
     };
     setMessages([defaultMsg]);
   };
+
+  // Check if form is valid for sending
+  const canSend = isValidEmail(email.trim()) && requestText.trim().length > 0 && !isSending;
 
   return (
     <div className="flex flex-col h-full bg-os-bg animate-slide-up">
@@ -343,28 +390,64 @@ const DirectMessage: React.FC<DirectMessageProps> = ({ user, onBack, initialMess
         <div ref={messagesEndRef} />
       </div>
 
-      {/* input area */}
+      {/* input area - with email and request fields */}
       <div className="p-4 bg-os-bg border-t border-os-border safe-bottom">
-        <div className="relative bg-os-card border border-os-border rounded-3xl p-1 flex items-end">
+        {/* Email input */}
+        <div className="mb-3">
+          <div className={`relative bg-os-card border rounded-xl flex items-center px-3 py-2 ${emailError ? 'border-red-500' : 'border-os-border focus-within:border-os-primary'} transition-colors`}>
+            <Mail size={16} className={`mr-2 flex-shrink-0 ${emailError ? 'text-red-500' : 'text-os-muted'}`} />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (emailError) setEmailError('');
+              }}
+              className="w-full bg-transparent text-os-text text-sm focus:outline-none placeholder:text-os-muted"
+              placeholder="Your email (required)"
+              disabled={isSending}
+            />
+            {isValidEmail(email.trim()) && (
+              <span className="text-green-500 text-xs ml-2">✓</span>
+            )}
+          </div>
+          {emailError && (
+            <span className="text-red-500 text-[10px] ml-3 mt-1">{emailError}</span>
+          )}
+        </div>
+
+        {/* Request message input */}
+        <div className="relative bg-os-card border border-os-border rounded-2xl p-1 flex items-end focus-within:border-os-primary transition-colors">
+          <MessageSquare size={16} className="text-os-muted ml-3 mb-3 flex-shrink-0" />
           <textarea
             ref={textareaRef}
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
+            value={requestText}
+            onChange={(e) => setRequestText(e.target.value)}
             onKeyDown={handleKeyDown}
             className="w-full bg-transparent text-os-text text-sm p-3 focus:outline-none resize-none overflow-y-auto"
-            placeholder="Message..."
+            placeholder="Your request/message (required)"
             style={{ minHeight: '44px', maxHeight: '120px' }}
             disabled={isSending}
           />
           <button
-            onClick={() => handleSendMessage(inputText)}
-            disabled={!inputText.trim() || isSending}
-            className={`p-2 rounded-full m-1 transition-all active:scale-95 flex-shrink-0 self-end ${inputText.trim() && !isSending ? 'text-os-primary hover:bg-os-primary/10' : 'text-os-muted'
+            onClick={handleSendMessage}
+            disabled={!canSend}
+            className={`p-2 rounded-full m-1 transition-all active:scale-95 flex-shrink-0 self-end ${canSend ? 'text-os-primary hover:bg-os-primary/10' : 'text-os-muted cursor-not-allowed'
               }`}
+            title={!isValidEmail(email.trim()) ? 'Valid email required' : !requestText.trim() ? 'Message required' : 'Send'}
           >
-            <Send size={20} fill={inputText.trim() ? "currentColor" : "none"} />
+            <Send size={20} fill={canSend ? "currentColor" : "none"} />
           </button>
         </div>
+
+        {/* Helper text */}
+        <p className="text-[10px] text-os-muted mt-2 px-2">
+          {!isValidEmail(email.trim()) && email.trim()
+            ? '⚠️ Enter a valid email to send'
+            : !requestText.trim()
+              ? '✏️ Enter your email and message to reach out'
+              : '✓ Ready to send'}
+        </p>
 
         {/* message count */}
         <div className="flex justify-between items-center mt-2 px-2">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ProfileData, ActivityItem } from '../types';
-import { GitCommit, Zap, Beaker, Award, PenTool, ClipboardCheck, ChevronDown } from 'lucide-react';
+import { GitCommit, Zap, Beaker, Award, PenTool, ClipboardCheck, ChevronDown, Radar } from 'lucide-react';
 
 interface ActivityProps {
   profile: ProfileData;
@@ -77,6 +77,24 @@ const Activity: React.FC<ActivityProps> = ({ profile }) => {
                     {item.imageUrl && (
                       <div className="mt-2 w-full h-32 rounded-lg overflow-hidden border border-os-border">
                         <img src={item.imageUrl} alt="preview" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+
+                    {/* Radar link button */}
+                    {item.link && (
+                      <div className={`mt-3 flex justify-end transition-all duration-500 ${isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            window.open(item.link, '_blank', 'noopener,noreferrer');
+                          }}
+                          className="group/radar relative p-2.5 bg-os-primary/10 hover:bg-os-primary/20 border border-os-primary/30 hover:border-os-primary/50 rounded-full transition-all duration-300 hover:scale-110 active:scale-95"
+                          title="View Project"
+                        >
+                          {/* Radar pulse animation */}
+                          <span className="absolute inset-0 rounded-full bg-os-primary/20 animate-ping" />
+                          <Radar size={18} className="relative z-10 text-os-primary group-hover/radar:rotate-45 transition-transform duration-300" />
+                        </button>
                       </div>
                     )}
                   </div>

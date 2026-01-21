@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Grid, Activity, User } from 'lucide-react';
+import { Home, Search, Activity, User } from 'lucide-react';
 import { Tab } from '../types';
 
 interface NavBarProps {
@@ -10,7 +10,7 @@ interface NavBarProps {
 const NavBar: React.FC<NavBarProps> = ({ activeTab, onSwitch }) => {
   const navItems: { id: Tab; icon: React.FC<any> }[] = [
     { id: 'home', icon: Home },
-    { id: 'explore', icon: Grid },
+    { id: 'explore', icon: Search },
     { id: 'activity', icon: Activity },
     { id: 'profile', icon: User },
   ];

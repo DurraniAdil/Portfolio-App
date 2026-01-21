@@ -64,6 +64,7 @@ export interface ActivityItem {
   description: string;
   type: 'ship' | 'learn' | 'experiment' | 'award' | 'publish' | 'manage';
   imageUrl?: string;
+  link?: string;
 }
 
 export interface ExploreItem {

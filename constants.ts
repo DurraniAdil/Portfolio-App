@@ -166,16 +166,16 @@ const DEV_PROFILE: ProfileData = {
     }
   ],
   activities: [
-    { id: "a_dev_1", date: "Nov 2024", title: "NotePad", description: "Built feature-rich notepad with resizable workspace, dark mode, and local storage.", type: "ship" },
-    { id: "a_dev_2", date: "Nov 2024", title: "Random Quote Machine", description: "Developed dynamic quote generator with Fetch API and instant clipboard copy.", type: "ship" },
-    { id: "a_dev_3", date: "Nov 2024", title: "Pokédex App", description: "Created interactive Pokémon database using PokeAPI with search/filter.", type: "ship" },
-    { id: "a_dev_4", date: "Apr 2024", title: "Authapp", description: "Built full-stack auth system with Google Sign-in and FCM using Next.js & Expo.", type: "ship" },
-    { id: "a_dev_5", date: "Mar 2024", title: "EmployWise", description: "Designed employee management frontend with protected routes and React Router.", type: "ship" },
-    { id: "a_dev_6", date: "2025", title: "DEKONSTRT", description: "AI-Powered Code Analysis & Deconstruction Tool.", type: "experiment" },
-    { id: "a_dev_7", date: "2025", title: "THEMATIC TRANSLATOR", description: "Linguistic AI Suite for Urdu poetry archives.", type: "experiment" },
-    { id: "a_dev_8", date: "2025", title: "IBN-E-ADIL", description: "Personal Literary-Tech Identity Site.", type: "experiment" },
-    { id: "a_dev_9", date: "2025", title: "MUSE", description: "Digital Atelier for Poetry and Quote Cards.", type: "publish" },
-    { id: "a_dev_10", date: "2026", title: "3D Printing Studio", description: "Premium e-commerce platform for BE Endless 3D printing service.", type: "ship" }
+    { id: "a_dev_1", date: "Nov 2024", title: "NotePad", description: "Built feature-rich notepad with resizable workspace, dark mode, and local storage.", type: "ship", link: "https://github.com/DurraniAdil/NotePad" },
+    { id: "a_dev_2", date: "Nov 2024", title: "Random Quote Machine", description: "Developed dynamic quote generator with Fetch API and instant clipboard copy.", type: "ship", link: "https://github.com/DurraniAdil/Random-Quote-Machine" },
+    { id: "a_dev_3", date: "Nov 2024", title: "Pokédex App", description: "Created interactive Pokémon database using PokeAPI with search/filter.", type: "ship", link: "https://github.com/DurraniAdil/Pok-dex" },
+    { id: "a_dev_4", date: "Apr 2024", title: "Authapp", description: "Built full-stack auth system with Google Sign-in and FCM using Next.js & Expo.", type: "ship", link: "https://github.com/DurraniAdil/Authapp" },
+    { id: "a_dev_5", date: "Mar 2024", title: "EmployWise", description: "Designed employee management frontend with protected routes and React Router.", type: "ship", link: "https://github.com/DurraniAdil/Employ-Wise" },
+    { id: "a_dev_6", date: "2025", title: "DEKONSTRT", description: "AI-Powered Code Analysis & Deconstruction Tool.", type: "experiment", link: "https://github.com/DurraniAdil" },
+    { id: "a_dev_7", date: "2025", title: "THEMATIC TRANSLATOR", description: "Linguistic AI Suite for Urdu poetry archives.", type: "experiment", link: "https://github.com/DurraniAdil" },
+    { id: "a_dev_8", date: "2025", title: "IBN-E-ADIL", description: "Personal Literary-Tech Identity Site.", type: "experiment", link: "https://github.com/DurraniAdil" },
+    { id: "a_dev_9", date: "2025", title: "MUSE", description: "Digital Atelier for Poetry and Quote Cards.", type: "publish", link: "https://durraniadil.github.io/Muse/" },
+    { id: "a_dev_10", date: "2026", title: "3D Printing Studio", description: "Premium e-commerce platform for BE Endless 3D printing service.", type: "ship", link: "https://www.endless3dprinting.com/" }
   ],
   explore: [
     createSkill('js', 'JavaScript', 'Language', 'javascript', 'F7DF1E'),

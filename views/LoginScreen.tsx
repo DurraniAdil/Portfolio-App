@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, ChevronRight, Plus, Terminal, Activity, Feather, Copy, ShieldCheck, Loader2 } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Plus, Terminal, Activity, Feather, Copy, ShieldCheck, Loader2, Home, X } from 'lucide-react';
 import { Button } from '../components/UI';
 import { PROFILES } from '../constants';
 import { ProfileData } from '../types';
@@ -10,10 +10,11 @@ const media = (path: string) => `${BASE_URL}media/${path}`;
 
 interface LoginScreenProps {
     onLogin: (password: string) => void;
+    onReboot?: () => void;
     error?: string;
 }
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
+const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onReboot, error }) => {
     const [selectedProfile, setSelectedProfile] = useState<ProfileData | null>(null);
     const [password, setPassword] = useState('');
     const [isTransitioning, setIsTransitioning] = useState(false);
@@ -24,6 +25,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
     const [showOtp, setShowOtp] = useState(false);
     const [generatingOtp, setGeneratingOtp] = useState(false);
     const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
+    const [showOsPopup, setShowOsPopup] = useState(false);
+    const [showAboutPopup, setShowAboutPopup] = useState(false);
 
     const profiles = Object.values(PROFILES);
 
@@ -340,6 +343,64 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
                 <div className="absolute bottom-[-20%] right-[-20%] w-[500px] h-[500px] bg-fuchsia-900/20 rounded-full blur-[100px]"></div>
             </div>
 
+            {/* Top navigation buttons */}
+            <div className="absolute top-6 left-0 right-0 z-20 flex justify-between items-center px-6">
+                {/* Home/Reboot button - left */}
+                {onReboot && (
+                    <button
+                        onClick={onReboot}
+                        className="p-2.5 bg-neutral-800/60 backdrop-blur-md rounded-full border border-neutral-700/50 hover:bg-neutral-700/60 transition-all active:scale-95"
+                        title="Reboot"
+                    >
+                        <Home size={18} className="text-white" />
+                    </button>
+                )}
+                {!onReboot && <div />}
+
+                {/* About button - right */}
+                <button
+                    onClick={() => setShowAboutPopup(true)}
+                    className="w-10 h-10 rounded-full overflow-hidden border-2 border-neutral-700/50 hover:border-pink-500/50 transition-all active:scale-95 bg-neutral-800/60 backdrop-blur-md"
+                    title="About"
+                >
+                    <img src={media('login.png')} alt="About" className="w-full h-full object-cover" />
+                </button>
+            </div>
+
+            {/* About popup */}
+            {showAboutPopup && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center px-6" onClick={() => setShowAboutPopup(false)}>
+                    <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+                    <div
+                        className="relative bg-neutral-900/95 backdrop-blur-md border border-neutral-700 rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button
+                            onClick={() => setShowAboutPopup(false)}
+                            className="absolute top-4 right-4 text-neutral-400 hover:text-white transition-colors"
+                        >
+                            <X size={18} />
+                        </button>
+
+                        <div className="flex items-center gap-3 mb-4">
+                            <img src={media('login.png')} alt="Logo" className="w-12 h-12 rounded-xl" />
+                            <div>
+                                <h3 className="font-bold text-white text-lg">Adil.OS</h3>
+                                <p className="text-xs text-neutral-400">v1.0 • Portfolio Experience</p>
+                            </div>
+                        </div>
+
+                        <p className="text-sm text-neutral-300 leading-relaxed mb-4">
+                            A multi-persona portfolio experience designed like a mobile OS. Choose between Developer, Operations, or Content Creator profiles to explore different facets of my professional journey.
+                        </p>
+
+                        <div className="text-xs text-neutral-500 pt-3 border-t border-neutral-800 text-center">
+                            Built with React, TypeScript & Tailwind CSS
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className="flex-1 flex flex-col justify-center w-full max-w-sm mx-auto z-10">
                 <div className="flex justify-center mb-8 md:mb-16 scale-100 md:scale-125">
                     {/* logo/title*/}
@@ -371,11 +432,34 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
                     ))}
                 </div>
 
-                <div className="mt-8 flex justify-center">
-                    <button onClick={() => window.open('https://durraniadil.github.io/Portfolio-Portal/')} className="flex items-center gap-2 text-blue-500 text-sm font-semibold opacity-80 hover:opacity-100 transition-opacity">
-                        {/* done messed and branched out for some reason but it works fine now, think it was the deployment issue*/}
+                <div className="mt-8 flex flex-col items-center gap-3">
+                    <button
+                        onClick={() => setShowOsPopup(true)}
+                        className="flex items-center gap-2 text-blue-500 text-sm font-semibold opacity-80 hover:opacity-100 transition-opacity"
+                    >
                         <Plus size={16} /> Log in using another device
                     </button>
+
+                    {/* Mobile-friendly popup */}
+                    {showOsPopup && (
+                        <div className="animate-fade-in bg-neutral-800/95 backdrop-blur-md border border-neutral-700 rounded-2xl p-4 shadow-2xl max-w-xs w-full">
+                            <p className="text-white text-sm text-center mb-3">Back to the portal?</p>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => setShowOsPopup(false)}
+                                    className="flex-1 py-2 px-4 bg-neutral-700 hover:bg-neutral-600 text-white text-xs font-semibold rounded-lg transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => window.open('https://durraniadil.github.io/Portfolio-Portal/')}
+                                    className="flex-1 py-2 px-4 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg transition-colors"
+                                >
+                                    Let's Go!
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -383,8 +467,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, error }) => {
                 <div className="flex flex-col items-center gap-1 opacity-40">
                     <span className="text-[10px] uppercase tracking-widest font-medium">From</span>
                     <span className="font-bold tracking-tight text-white flex items-center gap-1">
-                        <img src={media('login.png')} alt="Logo" className="w-4 h-4 object-contain" />
-                        Adil Portfolio
+                        Adil
                     </span>
                 </div>
             </div>

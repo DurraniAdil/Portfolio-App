@@ -200,7 +200,7 @@ const App: React.FC = () => {
   }
 
   if (!isAuthenticated || !currentProfile) {
-    return <LoginScreen onLogin={handleLogin} error={loginError} />;
+    return <LoginScreen onLogin={handleLogin} onReboot={() => setLoading(true)} error={loginError} />;
   }
   return (
     <div className="relative bg-os-bg min-h-screen text-os-text font-sans overflow-hidden transition-colors duration-500">
