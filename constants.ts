@@ -162,7 +162,7 @@ const DEV_PROFILE: ProfileData = {
         stack: ["React 18", "TypeScript", "Vite", "Tailwind CSS", "React Router", "Lucide React"]
       },
       //will eventually gon add this to my own repo
-      links: { demo: "https://www.endless3dprinting.com/", repo: "https://github.com/shahidsk0403/be-endless-3d-studio" }
+      links: { demo: "https://www.endless3dprinting.com/" }
     }
   ],
   activities: [
