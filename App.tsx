@@ -9,6 +9,7 @@ import LoginScreen from './views/LoginScreen';
 import NavBar from './components/NavBar';
 import ProjectDetailView from './components/ProjectDetailView';
 import StoryModal from './components/StoryModal';
+import { DeviceGuard } from './components/DeviceGuard';
 import { Tab, Project, ProfileData, ViewState, Story } from './types';
 import { PROFILES } from './constants';
 
@@ -196,59 +197,81 @@ const App: React.FC = () => {
       setLoading(false);
       return null;
     }
-    return <SplashScreen onFinish={() => setLoading(false)} />;
+    return (
+      <>
+        <DeviceGuard
+          redirectUrl="https://durraniadil.github.io/Portfolio-Portal/"
+          breakpoint={1024}
+        />
+        <SplashScreen onFinish={() => setLoading(false)} />
+      </>
+    );
   }
 
   if (!isAuthenticated || !currentProfile) {
-    return <LoginScreen onLogin={handleLogin} onReboot={() => setLoading(true)} error={loginError} />;
+    return (
+      <>
+        <DeviceGuard
+          redirectUrl="https://durraniadil.github.io/Portfolio-Portal/"
+          breakpoint={1024}
+        />
+        <LoginScreen onLogin={handleLogin} onReboot={() => setLoading(true)} error={loginError} />
+      </>
+    );
   }
   return (
-    <div className="relative bg-os-bg min-h-screen text-os-text font-sans overflow-hidden transition-colors duration-500">
+    <>
+      <DeviceGuard
+        redirectUrl="https://durraniadil.github.io/Portfolio-Portal/"
+        breakpoint={1024}
+      />
+      <div className="relative bg-os-bg min-h-screen text-os-text font-sans overflow-hidden transition-colors duration-500">
 
-      <div className="max-w-md mx-auto h-screen relative bg-os-bg shadow-2xl overflow-hidden flex flex-col transition-colors duration-500">
+        <div className="max-w-md mx-auto h-screen relative bg-os-bg shadow-2xl overflow-hidden flex flex-col transition-colors duration-500">
 
-        <main className="flex-1 overflow-y-auto no-scrollbar scroll-smooth relative bg-os-bg">
-          {renderContent()}
-        </main>
+          <main className="flex-1 overflow-y-auto no-scrollbar scroll-smooth relative bg-os-bg">
+            {renderContent()}
+          </main>
 
-        {currentView !== 'dm' && !isStoryOpen && (
-          <NavBar activeTab={currentView as Tab} onSwitch={handleTabSwitch} />
-        )}
+          {currentView !== 'dm' && !isStoryOpen && (
+            <NavBar activeTab={currentView as Tab} onSwitch={handleTabSwitch} />
+          )}
 
-        {selectedProject && (
-          <ProjectDetailView
-            project={selectedProject}
-            onClose={handleCloseProject}
-          />
-        )}
+          {selectedProject && (
+            <ProjectDetailView
+              project={selectedProject}
+              onClose={handleCloseProject}
+            />
+          )}
 
-        {selectedStory && (
-          <StoryModal
-            story={selectedStory}
-            onClose={() => {
-              setSelectedStory(null);
-              setIsStoryOpen(false);
-            }}
-            onReply={(msg) => {
-              setSelectedStory(null);
-              setIsStoryOpen(false);
-              handleOpenDM(msg);
-            }}
-          />
-        )}
-      </div>
+          {selectedStory && (
+            <StoryModal
+              story={selectedStory}
+              onClose={() => {
+                setSelectedStory(null);
+                setIsStoryOpen(false);
+              }}
+              onReply={(msg) => {
+                setSelectedStory(null);
+                setIsStoryOpen(false);
+                handleOpenDM(msg);
+              }}
+            />
+          )}
+        </div>
 
-      <div className="hidden lg:block fixed inset-0 -z-10 bg-neutral-900 pointer-events-none transition-all duration-700"
-        style={{ backgroundColor: currentProfile.theme.colors.bg === '#09090b' ? '#111' : '#ccc' }}
-      >
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-          <h2 className="text-os-text font-bold text-6xl opacity-10 font-display tracking-tighter uppercase">
-            {currentProfile.id} OS
-          </h2>
+        <div className="hidden lg:block fixed inset-0 -z-10 bg-neutral-900 pointer-events-none transition-all duration-700"
+          style={{ backgroundColor: currentProfile.theme.colors.bg === '#09090b' ? '#111' : '#ccc' }}
+        >
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+            <h2 className="text-os-text font-bold text-6xl opacity-10 font-display tracking-tighter uppercase">
+              {currentProfile.id} OS
+            </h2>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
