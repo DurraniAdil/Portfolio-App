@@ -74,6 +74,24 @@ const DEV_PROFILE: ProfileData = {
   projects: [
     //fav projects for homefeed as posts
     {
+      id: "p_dev_wimc",
+      title: "Where Is My Café?",
+      subtitle: "Hyper-Local Cafe Discovery Platform",
+      description: "Hyper-local discovery platform featuring advanced mapping and social discovery features, built as a full-stack live startup project.",
+      imageUrl: media('poster.png'),
+      role: "Tech Lead & Sole Developer",
+      year: "2025",
+      tags: ["React 19", "Node.js", "Leaflet", "MongoDB"],
+      stats: { duration: "Live Startup", views: "Vercel", likes: 850 },
+      details: {
+        problem: "Decentralized cafe information and lack of hyper-local discovery tools for Aurangabad residents.",
+        approach: "Built a full-stack SPA with React 19 and Node.js. Integrated Leaflet with custom CARTO basemaps, algorithmic marker clustering, and Haversine tracking. Developed geocoding pipelines using OSM Nominatim.",
+        outcome: "Successfully scaled to 65+ venues, secured first-round cafe owner onboarding, and implemented a social 'Trip Planner' and 'Memories' system.",
+        stack: ["React 19", "TypeScript", "Vite", "Node.js", "Express", "MongoDB Atlas", "Leaflet", "Cloudinary", "Python"]
+      },
+      links: { demo: "https://whereismycafe.vercel.app/" }
+    },
+    {
       id: "p_dev_dekonstrt",
       title: "DEKONSTRT",
       subtitle: "AI Code Analysis",
@@ -164,8 +182,10 @@ const DEV_PROFILE: ProfileData = {
       //will eventually gon add this to my own repo
       links: { demo: "https://www.endless3dprinting.com/" }
     }
+
   ],
   activities: [
+    { id: "a_dev_11", date: "2025", title: "Where Is My Café?", description: "Live startup discovery platform for Aurangabad. Engineered full-stack architecture with advanced mapping and social features.", type: "ship", link: "https://whereismycafe.vercel.app/" },
     { id: "a_dev_1", date: "Nov 2024", title: "NotePad", description: "Built feature-rich notepad with resizable workspace, dark mode, and local storage.", type: "ship", link: "https://github.com/DurraniAdil/NotePad" },
     { id: "a_dev_2", date: "Nov 2024", title: "Random Quote Machine", description: "Developed dynamic quote generator with Fetch API and instant clipboard copy.", type: "ship", link: "https://github.com/DurraniAdil/Random-Quote-Machine" },
     { id: "a_dev_3", date: "Nov 2024", title: "Pokédex App", description: "Created interactive Pokémon database using PokeAPI with search/filter.", type: "ship", link: "https://github.com/DurraniAdil/Pok-dex" },
